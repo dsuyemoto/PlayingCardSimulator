@@ -44,5 +44,32 @@ namespace Dealer.Tests
             Assert.IsTrue(dealt);
             Assert.AreEqual(3, _holdem.Community.Count);
         }
+
+        [Test]
+        public void Deal_TurnCards_AreEqualTest()
+        {
+            _holdem.SeatPlayer(new Player(0), 0);
+            _holdem.SeatPlayer(new Player(1), 1);
+            _holdem.Deal();
+            _holdem.Deal();
+            var dealt = _holdem.Deal();
+
+            Assert.IsTrue(dealt);
+            Assert.AreEqual(4, _holdem.Community.Count);
+        }
+
+        [Test]
+        public void Deal_RiverCards_AreEqualTest()
+        {
+            _holdem.SeatPlayer(new Player(0), 0);
+            _holdem.SeatPlayer(new Player(1), 1);
+            _holdem.Deal();
+            _holdem.Deal();
+            _holdem.Deal();
+            var dealt = _holdem.Deal();
+
+            Assert.IsTrue(dealt);
+            Assert.AreEqual(5, _holdem.Community.Count);
+        }
     }
 }

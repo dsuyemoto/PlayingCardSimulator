@@ -36,6 +36,7 @@ namespace Dealer
                     Community.Add(card);
                     cardsDealt++;
                 }
+                Street++;
 
                 return true;
             }
@@ -44,12 +45,18 @@ namespace Dealer
                 var card = _deck.GetRandomCard();
                 card.IsHidden = false;
                 Community.Add(card);
+                Street++;
+
+                return true;
             }
             else if (Street == 3)
             {
                 var card = _deck.GetRandomCard();
                 card.IsHidden = false;
                 Community.Add(card);
+                Street++;
+
+                return true;
             }
 
             return false;
