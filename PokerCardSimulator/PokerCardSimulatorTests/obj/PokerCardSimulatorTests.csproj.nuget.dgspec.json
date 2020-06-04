@@ -4,14 +4,14 @@
     "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\PokerCardSimulatorTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj": {
+    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj",
-        "projectName": "CardDeck",
-        "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj",
+        "projectUniqueName": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
+        "projectName": "Dealer",
+        "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
         "packagesPath": "C:\\Users\\Doug\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\obj\\",
+        "outputPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Doug\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -85,8 +85,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj": {
-                "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj"
+              "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
+                "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
               },
               "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
                 "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj"

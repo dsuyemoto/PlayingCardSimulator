@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "PokerCardSimulatorTests/1.0.0": {
         "dependencies": {
-          "CardDeck": "1.0.0",
+          "Dealer": "1.0.0",
           "Microsoft.NET.Test.Sdk": "16.4.0",
           "NUnit3TestAdapter": "3.15.1",
           "PokerCardSimulator": "1.0.0",
@@ -867,9 +867,9 @@
           }
         }
       },
-      "CardDeck/1.0.0": {
+      "Dealer/1.0.0": {
         "runtime": {
-          "CardDeck.dll": {}
+          "Dealer.dll": {}
         }
       },
       "PokerCardSimulator/1.0.0": {
@@ -1326,7 +1326,7 @@
       "path": "system.xml.xpath.xmldocument/4.3.0",
       "hashPath": "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512"
     },
-    "CardDeck/1.0.0": {
+    "Dealer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

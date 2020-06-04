@@ -100,5 +100,5 @@ C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimu
 C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\PokerCardSimulator.exe
 C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\PokerCardSimulator.dll
 C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\PokerCardSimulator.pdb
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\CardDeck.dll
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\CardDeck.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\Dealer.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\PokerCardSimulatorTests\bin\Debug\netcoreapp3.1\Dealer.pdb

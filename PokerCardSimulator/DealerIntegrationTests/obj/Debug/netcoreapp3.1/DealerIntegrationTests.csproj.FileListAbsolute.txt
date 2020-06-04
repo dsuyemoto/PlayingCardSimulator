@@ -1,0 +1,16 @@
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.exe
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.deps.json
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.runtimeconfig.json
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.runtimeconfig.dev.json
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\DealerIntegrationTests.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\Dealer.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\bin\Debug\netcoreapp3.1\Dealer.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.csprojAssemblyReference.cache
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.AssemblyInfoInputs.cache
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.AssemblyInfo.cs
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.csproj.CoreCompileInputs.cache
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.csproj.CopyComplete
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\DealerIntegrationTests\obj\Debug\netcoreapp3.1\DealerIntegrationTests.genruntimeconfig.cache

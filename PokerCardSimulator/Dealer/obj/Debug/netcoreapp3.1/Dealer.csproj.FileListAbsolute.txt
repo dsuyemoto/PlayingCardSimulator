@@ -1,0 +1,9 @@
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\bin\Debug\netcoreapp3.1\Dealer.deps.json
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\bin\Debug\netcoreapp3.1\Dealer.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\bin\Debug\netcoreapp3.1\Dealer.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.AssemblyInfoInputs.cache
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.AssemblyInfo.cs
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.csproj.CoreCompileInputs.cache
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.dll
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.pdb
+C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\Dealer\obj\Debug\netcoreapp3.1\Dealer.csprojAssemblyReference.cache

@@ -1,7 +1,5 @@
-using CardDeck;
+using Dealer;
 using NUnit.Framework;
-using PokerCardSimulator;
-using System.Security.Cryptography;
 
 namespace PokerCardSimulatorTests
 {

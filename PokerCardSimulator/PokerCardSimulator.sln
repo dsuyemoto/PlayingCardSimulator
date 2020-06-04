@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerCardSimulator", "PokerCardSimulator\PokerCardSimulator.csproj", "{1C790B73-D989-4B4A-96DE-CF09C489617A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerCardSimulator", "PokerCardSimulator\PokerCardSimulator.csproj", "{1C790B73-D989-4B4A-96DE-CF09C489617A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerCardSimulatorTests", "PokerCardSimulatorTests\PokerCardSimulatorTests.csproj", "{72F1C174-D745-4715-AF59-75AEB6A605CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerCardSimulatorTests", "PokerCardSimulatorTests\PokerCardSimulatorTests.csproj", "{72F1C174-D745-4715-AF59-75AEB6A605CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDeck", "CardDeck\CardDeck.csproj", "{D7C45D2B-1F1F-4D3D-B965-F1598F4AD825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dealer", "Dealer\Dealer.csproj", "{E5E3DC45-AE81-442B-B40E-2537193328F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDeskTests", "CardDeskTests\CardDeskTests.csproj", "{5538566B-CC79-45E9-B4D9-EC7D8D72B851}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DealerTests", "DealerTests\DealerTests.csproj", "{A9CA417B-C3B2-46A8-A652-80DF41D4331F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DealerIntegrationTests", "DealerIntegrationTests\DealerIntegrationTests.csproj", "{419D723C-7FCB-40BE-8E84-D27DB55B8CAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +27,18 @@ Global
 		{72F1C174-D745-4715-AF59-75AEB6A605CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72F1C174-D745-4715-AF59-75AEB6A605CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72F1C174-D745-4715-AF59-75AEB6A605CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7C45D2B-1F1F-4D3D-B965-F1598F4AD825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7C45D2B-1F1F-4D3D-B965-F1598F4AD825}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7C45D2B-1F1F-4D3D-B965-F1598F4AD825}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7C45D2B-1F1F-4D3D-B965-F1598F4AD825}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5538566B-CC79-45E9-B4D9-EC7D8D72B851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5538566B-CC79-45E9-B4D9-EC7D8D72B851}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5538566B-CC79-45E9-B4D9-EC7D8D72B851}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5538566B-CC79-45E9-B4D9-EC7D8D72B851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E3DC45-AE81-442B-B40E-2537193328F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E3DC45-AE81-442B-B40E-2537193328F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E3DC45-AE81-442B-B40E-2537193328F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E3DC45-AE81-442B-B40E-2537193328F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CA417B-C3B2-46A8-A652-80DF41D4331F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CA417B-C3B2-46A8-A652-80DF41D4331F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CA417B-C3B2-46A8-A652-80DF41D4331F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CA417B-C3B2-46A8-A652-80DF41D4331F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419D723C-7FCB-40BE-8E84-D27DB55B8CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419D723C-7FCB-40BE-8E84-D27DB55B8CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419D723C-7FCB-40BE-8E84-D27DB55B8CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419D723C-7FCB-40BE-8E84-D27DB55B8CAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

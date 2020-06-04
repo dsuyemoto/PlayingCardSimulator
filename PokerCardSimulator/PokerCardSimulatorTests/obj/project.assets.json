@@ -1226,14 +1226,14 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "CardDeck/1.0.0": {
+      "Dealer/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "compile": {
-          "bin/placeholder/CardDeck.dll": {}
+          "bin/placeholder/Dealer.dll": {}
         },
         "runtime": {
-          "bin/placeholder/CardDeck.dll": {}
+          "bin/placeholder/Dealer.dll": {}
         }
       },
       "PokerCardSimulator/1.0.0": {
@@ -4642,10 +4642,10 @@
         "system.xml.xpath.xmldocument.nuspec"
       ]
     },
-    "CardDeck/1.0.0": {
+    "Dealer/1.0.0": {
       "type": "project",
-      "path": "../CardDeck/CardDeck.csproj",
-      "msbuildProject": "../CardDeck/CardDeck.csproj"
+      "path": "../Dealer/Dealer.csproj",
+      "msbuildProject": "../Dealer/Dealer.csproj"
     },
     "PokerCardSimulator/1.0.0": {
       "type": "project",
@@ -4655,7 +4655,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "CardDeck >= 1.0.0",
+      "Dealer >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 16.4.0",
       "NUnit3TestAdapter >= 3.15.1",
       "PokerCardSimulator >= 1.0.0",
@@ -4688,8 +4688,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj": {
-              "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\CardDeck\\CardDeck.csproj"
+            "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
+              "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
             },
             "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
               "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj"
