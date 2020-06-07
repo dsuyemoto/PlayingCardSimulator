@@ -33,5 +33,10 @@
         {
 
         }
+
+        public override string ToString()
+        {
+            return RankValue.ToString() + SuitValue.ToString();
+        }
     }
 }

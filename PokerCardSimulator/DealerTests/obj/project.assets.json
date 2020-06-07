@@ -1820,7 +1820,6 @@
       "sha512": "U82mHQSKaIk+lpSVCbWYKNavmNH1i5xrExDEquU1i6I5pV6UMOqRnJRSlKO3cMPfcpp0RgDY+8jUXHdQ4IfXvw==",
       "type": "package",
       "path": "newtonsoft.json/9.0.1",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1937,7 +1936,6 @@
       "path": "system.appcontext/4.1.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2484,7 +2482,6 @@
       "path": "system.diagnostics.tools/4.0.1",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2951,7 +2948,6 @@
       "path": "system.linq.expressions/4.1.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -3035,7 +3031,6 @@
       "path": "system.objectmodel/4.0.12",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -3186,7 +3181,6 @@
       "path": "system.reflection.emit/4.0.1",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -3218,7 +3212,6 @@
       "path": "system.reflection.emit.ilgeneration/4.0.1",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -3251,7 +3244,6 @@
       "path": "system.reflection.emit.lightweight/4.0.1",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -3398,7 +3390,6 @@
       "path": "system.reflection.typeextensions/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -4449,7 +4440,6 @@
       "path": "system.xml.xdocument/4.0.11",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -4644,19 +4634,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Doug\\.nuget\\packages\\": {}
+    "C:\\Users\\dsuye\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\DealerTests.csproj",
+      "projectUniqueName": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\DealerTests.csproj",
       "projectName": "DealerTests",
-      "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\DealerTests.csproj",
-      "packagesPath": "C:\\Users\\Doug\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\obj\\",
+      "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\DealerTests.csproj",
+      "packagesPath": "C:\\Users\\dsuye\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Doug\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dsuye\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4669,8 +4659,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
-              "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
+            "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
+              "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
             }
           }
         }

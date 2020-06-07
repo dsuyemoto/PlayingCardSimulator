@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {}
+    "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
+    "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
+        "projectUniqueName": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
         "projectName": "PokerCardSimulator",
-        "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
-        "packagesPath": "C:\\Users\\Doug\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\obj\\",
+        "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
+        "packagesPath": "C:\\Users\\dsuye\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Doug\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dsuye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

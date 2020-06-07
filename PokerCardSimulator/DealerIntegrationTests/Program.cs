@@ -7,15 +7,28 @@ namespace DealerIntegrationTests
     {
         static void Main(string[] args)
         {
-            var _holdem = new TexasHoldem(new Deck());
-            _holdem.SeatPlayer(new Player(0), 0);
-            _holdem.SeatPlayer(new Player(1), 1);
+            var _holdem = new TexasHoldem(new Deck(), 10, 20);
+            _holdem.SeatPlayer(new Player(0, 1000), 0);
+            _holdem.SeatPlayer(new Player(1, 2000), 1);
             _holdem.Deal();
-            Console.WriteLine("Player0:" + _holdem.Seats[0].Cards[0].RankValue + _holdem.Seats[0].Cards[0].SuitValue +
-                _holdem.Seats[0].Cards[1].RankValue + _holdem.Seats[0].Cards[1].SuitValue
-                );
-            Console.WriteLine("Player1:" + _holdem.Seats[1].Cards[0].RankValue + _holdem.Seats[1].Cards[0].SuitValue +
-                _holdem.Seats[1].Cards[1].RankValue + _holdem.Seats[1].Cards[1].SuitValue);
+            Console.WriteLine("Player0:" + _holdem.SeatedPlayers[0].Cards[0].ToString() + _holdem.SeatedPlayers[0].Cards[1].ToString());
+            Console.WriteLine("Player1:" + _holdem.SeatedPlayers[1].Cards[0].ToString() + _holdem.SeatedPlayers[1].Cards[1].ToString());
+            Console.Read();
+
+            _holdem.Deal();
+            Console.WriteLine("Flop: " + 
+                _holdem.Community[0].ToString() + 
+                _holdem.Community[1].ToString() +
+                _holdem.Community[2].ToString());
+            //Console.Read();
+
+            _holdem.Deal();
+            Console.WriteLine("Turn: " + _holdem.Community[3].ToString());
+            //Console.Read(); 
+
+            _holdem.Deal();
+            Console.WriteLine("River: " + _holdem.Community[4].ToString());
+            Console.Read();
         }
     }
 }

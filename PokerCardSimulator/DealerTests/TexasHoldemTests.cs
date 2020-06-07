@@ -10,7 +10,7 @@ namespace Dealer.Tests
         [SetUp]
         public void Setup()
         {
-            _holdem = new TexasHoldem(new Deck());
+            _holdem = new TexasHoldem(new Deck(), 10, 20);
         }
 
         [Test()]
@@ -24,20 +24,20 @@ namespace Dealer.Tests
         [Test]
         public void Deal_Cards_Equals2Test()
         {
-            _holdem.SeatPlayer(new Player(0), 0);
-            _holdem.SeatPlayer(new Player(1), 1);
+            _holdem.SeatPlayer(new Player(0, 1000), 0);
+            _holdem.SeatPlayer(new Player(1, 2000), 1);
             var dealt = _holdem.Deal();
 
-            Assert.AreEqual(2, _holdem.Seats[0].Cards.Count);
-            Assert.AreEqual(2, _holdem.Seats[1].Cards.Count);
+            Assert.AreEqual(2, _holdem.SeatedPlayers[0].Cards.Count);
+            Assert.AreEqual(2, _holdem.SeatedPlayers[1].Cards.Count);
             Assert.IsTrue(dealt);
         }
 
         [Test]
         public void Deal_CommunityCards_AreEqualTest()
         {
-            _holdem.SeatPlayer(new Player(0), 0);
-            _holdem.SeatPlayer(new Player(1), 1);
+            _holdem.SeatPlayer(new Player(0, 1000), 0);
+            _holdem.SeatPlayer(new Player(1, 2000), 1);
             _holdem.Deal();
             var dealt = _holdem.Deal();
 

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {}
+    "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
+    "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
+        "projectUniqueName": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
         "projectName": "Dealer",
-        "projectPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
-        "packagesPath": "C:\\Users\\Doug\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Doug\\source\\repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\obj\\",
+        "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj",
+        "packagesPath": "C:\\Users\\dsuye\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Doug\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dsuye\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

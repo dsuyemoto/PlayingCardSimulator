@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Dealer
 {
@@ -11,40 +10,63 @@ namespace Dealer
 
         protected int TotalStreets { get; set; }
         protected int HoleCards { get; set; }
-        protected int DealerStart { get; set; }
-        public int Street { get; set; } = 0;
-        public List<Seat> Seats { get; } = new List<Seat>();
+        protected int DealerButton { get; set; }
+        public int StreetCount { get; set; } = 0;
+        public Player[] SeatedPlayers { get; protected set; }
         
         protected void DealHoleCards()
         {
-            var rounds = 0;
-            while (rounds < HoleCards)
+            var dealtCards = 0;
+            while (dealtCards < HoleCards)
             {
-                var cardPosition = DealerStart;
+                var seatPosition = DealerButton + 1;
                 var peopleDealt = 0;
-                while (peopleDealt < Seats.Count)
+                while (peopleDealt < SeatedPlayers.Length)
                 {
-                    if (Seats.Exists(s => s.Number == cardPosition))
+                    if (SeatedPlayers[seatPosition] != null)
                     {
-                        var seat = Seats.First(s => s.Number == cardPosition);
                         var card = _deck.GetRandomCard();
                         card.IsHidden = true;
-                        seat.Cards.Add(card);
+                        SeatedPlayers[seatPosition].Cards.Add(card);
                         peopleDealt++;
                     }
-                    cardPosition++;
+                    seatPosition++;
                 }
-                rounds++;
+                dealtCards++;
             }
+        }
+
+        public bool Bet()
+        {
+            return false;
         }
 
         public bool SeatPlayer(Player player, int seatNumber)
         {
-            if (Seats.Count > 0 && Seats.Exists(s => s.Number == seatNumber)) return false;
+            if (SeatedPlayers[seatNumber] != null) return false;
 
-            Seats.Add(new Seat(seatNumber) { Player = player });
+            SeatedPlayers[seatNumber] = player;
 
             return true;
+        }
+
+        public bool UnseatPlayer(int seatNumber)
+        {
+            if (SeatedPlayers[seatNumber] == null) return false;
+
+            SeatedPlayers[seatNumber] = null;
+
+            return true;
+        }
+
+        public List<int> GetAvailableSeats()
+        {
+            var emptySeats = new List<int>();
+            for (var i = 0; i < SeatedPlayers.Length; i++)
+                if (SeatedPlayers[i] == null)
+                    emptySeats.Add(i);
+
+            return emptySeats;
         }
     }
 }
