@@ -11,8 +11,8 @@ namespace DealerIntegrationTests
             _holdem.SeatPlayer(new Player(0, 1000), 0);
             _holdem.SeatPlayer(new Player(1, 2000), 1);
             _holdem.Deal();
-            Console.WriteLine("Player0:" + _holdem.SeatedPlayers[0].Cards[0].ToString() + _holdem.SeatedPlayers[0].Cards[1].ToString());
-            Console.WriteLine("Player1:" + _holdem.SeatedPlayers[1].Cards[0].ToString() + _holdem.SeatedPlayers[1].Cards[1].ToString());
+            Console.WriteLine("Player0:" + _holdem.Seats[0].Cards[0].ToString() + _holdem.Seats[0].Cards[1].ToString());
+            Console.WriteLine("Player1:" + _holdem.Seats[1].Cards[0].ToString() + _holdem.Seats[1].Cards[1].ToString());
             Console.Read();
 
             _holdem.Deal();

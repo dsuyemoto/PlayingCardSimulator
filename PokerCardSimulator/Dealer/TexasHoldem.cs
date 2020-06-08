@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
+using static Dealer.Player;
 
 namespace Dealer
 {
     public class TexasHoldem : TableBase
     {
-        private enum Street
+        public enum StreetName
         {
-            HoleCards = 0,
+            PreFlop = 0,
             Flop = 1,
             Turn = 2,
             River = 3
         }
 
-        public List<Card> Community { get; set; } = new List<Card>();
         public double SmallBlind { get; set; }
         public double BigBlind { get; set; }
+        public StreetName Street { get; set; } = StreetName.PreFlop;
 
         public TexasHoldem(
             Deck deck, 
@@ -25,54 +25,47 @@ namespace Dealer
             int dealerButton = 0)
         {
             _deck = deck;
-            TotalStreets = 3;
             HoleCards = 2;
             SmallBlind = smallBlind;
             BigBlind = bigBlind;
-            SeatedPlayers = new Player[seats];
+            Seats = new Player[seats];
             DealerButton = dealerButton;
+            Community = new Card[5];
+        }
+
+        public bool StartHand()
+        {
+            SetBlinds();
+            return Deal();
         }
 
         public bool Deal()
         {
-            if (Array.FindAll(SeatedPlayers, s => s != null).Length < 2) return false;
+            if (Array.FindAll(Seats, s => s != null).Length < 2) return false;
 
-            if (StreetCount == (int)Street.HoleCards)
+            if (Street == StreetName.PreFlop)
             {
                 DealHoleCards();
-                StreetCount++;
+                Street = StreetName.Flop;
 
                 return true;
             }
-            else if (StreetCount == (int)Street.Flop)
+            else if (Street == StreetName.Flop)
             {
-                var cardsDealt = 1;
-                while (cardsDealt < 4)
+                var cardsDealt = 0;
+                while (cardsDealt < 3)
                 {
-                    var card = _deck.GetRandomCard();
-                    card.IsHidden = false;
-                    Community.Add(card);
+                    DealCommunityCards(cardsDealt);
                     cardsDealt++;
                 }
-                StreetCount++;
+                Street = StreetName.Turn;
 
                 return true;
             }
-            else if (StreetCount == (int)Street.Turn)
+            else if (Street == StreetName.Turn || Street == StreetName.River)
             {
-                var card = _deck.GetRandomCard();
-                card.IsHidden = false;
-                Community.Add(card);
-                StreetCount++;
-
-                return true;
-            }
-            else if (StreetCount == (int)Street.River)
-            {
-                var card = _deck.GetRandomCard();
-                card.IsHidden = false;
-                Community.Add(card);
-                StreetCount++;
+                DealCommunityCards(3);
+                Street = StreetName.River;
 
                 return true;
             }
@@ -80,21 +73,82 @@ namespace Dealer
             return false;
         }
 
-        private double GetBlinds(int seatPosition)
+        public Player GetPlayer(Player previousPlayer)
         {
-            var smallBlindPosition = DealerButton + 1;
-            if (smallBlindPosition > SeatedPlayers.Length)
-                smallBlindPosition = smallBlindPosition - SeatedPlayers.Length;
-            var bigBlindPosition = DealerButton + 2;
-            if (bigBlindPosition > SeatedPlayers.Length)
-                bigBlindPosition = bigBlindPosition - SeatedPlayers.Length;
+            Player player = null;
+            while (player == null || player.Action == PlayerAction.Fold)
+            {
+                player = Seats[CardPosition];
+                CardPosition++;
+                if (CardPosition == Seats.Length)
+                    CardPosition = 0;
+                if (player != null)
+                {
+                    if (previousPlayer.Bet > 0)
+                        player.Options = new PlayerAction[] {
+                        PlayerAction.Bet,
+                        PlayerAction.Call,
+                        PlayerAction.Fold
+                    };
+                    else
+                        player.Options = new PlayerAction[]
+                        {
+                        PlayerAction.Bet,
+                        PlayerAction.Check,
+                        PlayerAction.Fold
+                        };
+                }
+            }
+            if (player != null)
+            {
+                player.MinBet = BigBlind;
+                if (previousPlayer.Bet > 0)
+                {
+                    if (previousPlayer.Bet > BigBlind)
+                        player.MinBet = (previousPlayer.Bet - previousPlayer.MinBet) + previousPlayer.Bet;
+                }
+            }
+            return player;
+        }
 
-            if (seatPosition == smallBlindPosition)
-                return SmallBlind;
-            else if (seatPosition == bigBlindPosition)
-                return BigBlind;
+        public bool ContinueBetting()
+        {
+            var activePlayers = Array.FindAll(Seats, s => s.Action != PlayerAction.Fold);
+            foreach (var activePlayer in activePlayers)
+                Pot = Pot + activePlayer.Bet;
+            if (Array.FindAll(Seats, s => s.Action != PlayerAction.Fold).Length > 1)
+                return true;
+            return false;
+        }
 
-            return 0;
+        private void SetBlinds()
+        {
+            var position = DealerButton + 1;
+            var seatCount = 1;
+            while (seatCount < 3)
+            {
+                if (position == Seats.Length)
+                    position = 0;
+                if (Seats[position] != null)
+                    if (seatCount == 1)
+                    {
+                        Seats[position].Bet = SmallBlind;
+                        seatCount++;
+                    }
+                    else if (seatCount == 2)
+                    {
+                        Seats[position].Bet = BigBlind;
+                        seatCount++;
+                    }
+                position++;
+            }
+        }
+
+        private void DealCommunityCards(int position)
+        {
+            var card = _deck.GetRandomCard();
+            card.IsHidden = false;
+            Community[position] = card;
         }
     }
 }
