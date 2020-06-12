@@ -19,8 +19,9 @@ namespace Dealer
         public double Chips { get; set; }
         public double Bet { get; set; }
         public PlayerAction Action { get; set; }
-        public PlayerAction[] Options { get; set; }
-        public double MinBet { get; set; }
+        public PromptOptions Options { get; set; }
+        public Func<PromptOptions, PromptActions> Prompt { get; set; }
+        public int SeatNumber { get; set; }
 
         public Player(int id, double chips)
         {

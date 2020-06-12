@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using static Dealer.Player;
 
 namespace Dealer
@@ -28,20 +29,43 @@ namespace Dealer
             HoleCards = 2;
             SmallBlind = smallBlind;
             BigBlind = bigBlind;
-            Seats = new Player[seats];
             DealerButton = dealerButton;
-            Community = new Card[5];
+            Seats = seats;
         }
 
-        public bool StartHand()
+        public void StartHand()
         {
             SetBlinds();
-            return Deal();
+            Deal();
+            Action();
+        }
+
+        private void SetBlinds()
+        {
+            var position = DealerButton + 1;
+            var seatCount = 1;
+            while (seatCount < 3)
+            {
+                if (position > Seats)
+                    position = 1;
+                if (Players.Exists((p)=> p.SeatNumber == position))
+                    if (seatCount == 1)
+                    {
+                        Players.Single((p)=> p.SeatNumber == position).Bet = SmallBlind;
+                        seatCount++;
+                    }
+                    else if (seatCount == 2)
+                    {
+                        Players.Single((p)=> p.SeatNumber == position).Bet = BigBlind;
+                        seatCount++;
+                    }
+                position++;
+            }
         }
 
         public bool Deal()
         {
-            if (Array.FindAll(Seats, s => s != null).Length < 2) return false;
+            if (Players.Count < 2) return false;
 
             if (Street == StreetName.PreFlop)
             {
@@ -52,19 +76,14 @@ namespace Dealer
             }
             else if (Street == StreetName.Flop)
             {
-                var cardsDealt = 0;
-                while (cardsDealt < 3)
-                {
-                    DealCommunityCards(cardsDealt);
-                    cardsDealt++;
-                }
+                DealCommunityCards(3);
                 Street = StreetName.Turn;
 
                 return true;
             }
             else if (Street == StreetName.Turn || Street == StreetName.River)
             {
-                DealCommunityCards(3);
+                DealCommunityCards(1);
                 Street = StreetName.River;
 
                 return true;
@@ -73,82 +92,105 @@ namespace Dealer
             return false;
         }
 
+        private void Action()
+        {
+            Player previousPlayer = null;
+            int playersActed = 0;
+            while (playersActed < Players.Count)
+            {
+                var player = GetPlayer(previousPlayer);
+                var result = player.Prompt(player.Options);
+                player.Action = result.PlayerAction;
+                player.Bet = result.Bet;
+                previousPlayer = player;
+                playersActed++;
+            }
+        }
+
         public Player GetPlayer(Player previousPlayer)
         {
             Player player = null;
-            while (player == null || player.Action == PlayerAction.Fold)
+            var actionSeatPosition = DealerButton + 1;
+            if (Street == StreetName.PreFlop)
+                actionSeatPosition = DealerButton + 3;
+            int seatCount = 1;
+            while (seatCount < Seats)
             {
-                player = Seats[CardPosition];
-                CardPosition++;
-                if (CardPosition == Seats.Length)
-                    CardPosition = 0;
-                if (player != null)
+                if (actionSeatPosition == Seats)
+                    actionSeatPosition = 1;
+
+                if (Players.Exists((p) => p.SeatNumber == actionSeatPosition))
                 {
-                    if (previousPlayer.Bet > 0)
-                        player.Options = new PlayerAction[] {
-                        PlayerAction.Bet,
-                        PlayerAction.Call,
-                        PlayerAction.Fold
-                    };
-                    else
-                        player.Options = new PlayerAction[]
-                        {
+                    player = Players.Single((p) => p.SeatNumber == actionSeatPosition);
+                    player.Options.PreviousBet = 0;
+                    player.Options.MinBet = BigBlind;
+                    player.Options.AllowedActions = new PlayerAction[]
+                    {
                         PlayerAction.Bet,
                         PlayerAction.Check,
                         PlayerAction.Fold
+                    };
+
+                    if (Street == StreetName.PreFlop)
+                    {
+                        player.Options.PreviousBet = BigBlind;
+                        player.Options.MinBet = BigBlind * 2;
+                        player.Options.AllowedActions = new PlayerAction[]
+                        {
+                            PlayerAction.Bet,
+                            PlayerAction.Call,
+                            PlayerAction.Fold
                         };
+                    }
+
+                    if (previousPlayer != null)
+                    {
+                        player.Options.PreviousBet = previousPlayer.Bet;
+                        if (previousPlayer.Bet > BigBlind)
+                            player.Options.MinBet =
+                                previousPlayer.Bet * 2 - 
+                                previousPlayer.Options.PreviousBet;
+
+                        if (previousPlayer.Bet < previousPlayer.Options.MinBet)
+                        {
+                            player.Options.AllowedActions = new PlayerAction[]
+                            {
+                                PlayerAction.Bet,
+                                PlayerAction.Call,
+                                PlayerAction.Fold
+                            };
+                            player.Options.MinBet = previousPlayer.Options.MinBet;
+                        }
+                    }
                 }
+
+                actionSeatPosition++;
+                seatCount++;
             }
-            if (player != null)
-            {
-                player.MinBet = BigBlind;
-                if (previousPlayer.Bet > 0)
-                {
-                    if (previousPlayer.Bet > BigBlind)
-                        player.MinBet = (previousPlayer.Bet - previousPlayer.MinBet) + previousPlayer.Bet;
-                }
-            }
+
             return player;
         }
 
-        public bool ContinueBetting()
+        private bool CollecBets()
         {
-            var activePlayers = Array.FindAll(Seats, s => s.Action != PlayerAction.Fold);
+            var activePlayers = Players.FindAll(s => s.Bet > 0);
             foreach (var activePlayer in activePlayers)
                 Pot = Pot + activePlayer.Bet;
-            if (Array.FindAll(Seats, s => s.Action != PlayerAction.Fold).Length > 1)
+            if (activePlayers.Count > 1)
                 return true;
             return false;
         }
 
-        private void SetBlinds()
+        private void DealCommunityCards(int number)
         {
-            var position = DealerButton + 1;
-            var seatCount = 1;
-            while (seatCount < 3)
+            var cardCount = 0;
+            while (cardCount < number)
             {
-                if (position == Seats.Length)
-                    position = 0;
-                if (Seats[position] != null)
-                    if (seatCount == 1)
-                    {
-                        Seats[position].Bet = SmallBlind;
-                        seatCount++;
-                    }
-                    else if (seatCount == 2)
-                    {
-                        Seats[position].Bet = BigBlind;
-                        seatCount++;
-                    }
-                position++;
+                var card = _deck.GetRandomCard();
+                card.IsHidden = false;
+                Community.Add(card);
+                cardCount++;
             }
-        }
-
-        private void DealCommunityCards(int position)
-        {
-            var card = _deck.GetRandomCard();
-            card.IsHidden = false;
-            Community[position] = card;
         }
     }
 }

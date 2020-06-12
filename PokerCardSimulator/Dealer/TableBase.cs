@@ -7,12 +7,12 @@ namespace Dealer
     public abstract class TableBase
     {
         protected Deck _deck;
-      
+
         protected int HoleCards { get; set; }
         protected int DealerButton { get; set; }
-        public Player[] Seats { get; protected set; }
-        public Card[] Community { get; set; }
-        protected int CardPosition { get; set; }
+        public List<Player> Players { get; protected set; } = new List<Player>();
+        public int Seats { get; protected set; }
+        public List<Card> Community { get; set; } = new List<Card>();
         public double Pot { get; set; }
 
         protected void DealHoleCards()
@@ -20,49 +20,49 @@ namespace Dealer
             var dealtCards = 0;
             while (dealtCards < HoleCards)
             {
-                var seatPosition = DealerButton + 1;
-                var peopleDealt = 0;
-                while (peopleDealt < Seats.Length)
-                {
-                    if (Seats[seatPosition] != null)
-                    {
-                        var card = _deck.GetRandomCard();
-                        card.IsHidden = true;
-                        Seats[seatPosition].Cards.Add(card);
-                        peopleDealt++;
-                    }
-                    seatPosition++;
-                }
+                DealCards(true);
                 dealtCards++;
+            }
+        }
+
+        protected void DealCards(bool isHidden)
+        {
+            var seatNumber = DealerButton + 1;
+            int seatCount = 0;
+            while (seatCount < Seats)
+            {
+                var playerIndex = Players.FindIndex(0, p => p.SeatNumber == seatNumber);
+                if (playerIndex >= 0)
+                {
+                    var card = _deck.GetRandomCard();
+                    card.IsHidden = isHidden;
+                    Players[playerIndex].Cards.Add(card);
+                }
+
+                seatCount++;
+                seatNumber++;
+                if (seatNumber > Seats)
+                    seatNumber = 1;
             }
         }
 
         public bool SeatPlayer(Player player, int seatNumber)
         {
-            if (Seats[seatNumber] != null) return false;
+            if (Players.Exists((p)=> p.SeatNumber == seatNumber)) return false;
 
-            Seats[seatNumber] = player;
+            player.SeatNumber = seatNumber;
+            Players.Add(player);
 
             return true;
         }
 
         public bool UnseatPlayer(int seatNumber)
         {
-            if (Seats[seatNumber] == null) return false;
+            if (!Players.Exists((p)=> p.SeatNumber == seatNumber)) return false;
 
-            Seats[seatNumber] = null;
+            Players.Remove(Players.Single((p)=> p.SeatNumber == seatNumber));
 
             return true;
-        }
-
-        public List<int> GetAvailableSeats()
-        {
-            var emptySeats = new List<int>();
-            for (var i = 0; i < Seats.Length; i++)
-                if (Seats[i] == null)
-                    emptySeats.Add(i);
-
-            return emptySeats;
         }
     }
 }
