@@ -4653,20 +4653,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dsuye\\.nuget\\packages\\": {}
+    "C:\\Users\\Doug\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\PokerCardSimulatorTests.csproj",
+      "projectUniqueName": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\PokerCardSimulatorTests.csproj",
       "projectName": "PokerCardSimulatorTests",
-      "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\PokerCardSimulatorTests.csproj",
-      "packagesPath": "C:\\Users\\dsuye\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\obj\\",
+      "projectPath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\PokerCardSimulatorTests.csproj",
+      "packagesPath": "C:\\Users\\Doug\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulatorTests\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\dsuye\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Doug\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -4678,11 +4685,11 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
-              "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
+            "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj": {
+              "projectPath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\Dealer\\Dealer.csproj"
             },
-            "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
-              "projectPath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj"
+            "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj": {
+              "projectPath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj"
             }
           }
         }
@@ -4719,12 +4726,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.2, 3.1.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -4733,7 +4734,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
