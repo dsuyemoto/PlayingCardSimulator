@@ -4,7 +4,7 @@ namespace Dealer
 {
     public class PromptActions
     {
-        public PlayerAction PlayerAction { get; set; }
+        public PlayerAction PlayerAction { get; set; } = PlayerAction.Fold;
         public double Bet { get; set; }
     }
 }
