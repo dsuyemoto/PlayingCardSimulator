@@ -48,6 +48,8 @@ namespace Dealer
 
         public bool SeatPlayer(Player player, int seatNumber)
         {
+            if (seatNumber < 1 || seatNumber > Seats) throw new Exception("seat number invalid");
+
             if (Players.Exists((p)=> p.SeatNumber == seatNumber)) return false;
 
             player.SeatNumber = seatNumber;
@@ -58,6 +60,8 @@ namespace Dealer
 
         public bool UnseatPlayer(int seatNumber)
         {
+            if (seatNumber < 1 || seatNumber > Seats) throw new Exception("seat number invalid");
+
             if (!Players.Exists((p)=> p.SeatNumber == seatNumber)) return false;
 
             Players.Remove(Players.Single((p)=> p.SeatNumber == seatNumber));
