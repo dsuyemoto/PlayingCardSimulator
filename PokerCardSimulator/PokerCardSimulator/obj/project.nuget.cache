@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "p7UHpsdBXk2SPZi/ulP9eGtoE2V9ztZgKZQ7z2Z0Av/XgYdfYAlZuFkO1Xgoj1Ld7AtU6cxj/AV0fHh0k4bmcg==",
+  "dgSpecHash": "WYvJbKRwx83kQX+txjenXf+/zci3af8x6tEhFxeVoZjV+wo0AuP4s0tcaA5MdwcA/U1owqd/zO9gnkmQZqK35w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\PokerCardSimulator\\PokerCardSimulator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dsuye\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
   "logs": []
 }

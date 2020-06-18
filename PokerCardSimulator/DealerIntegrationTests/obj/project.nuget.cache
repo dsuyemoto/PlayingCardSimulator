@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "rWMu5Taxy/qo+57fDIqUFIkHJpSNL7Jo0Nngl+lH83IgTc9oSU7kWa3PDYWQblTZimkrQjFar+rMFt1CzLjIbw==",
+  "dgSpecHash": "CQM9sTh3q/qYuMIFh7KIH3ens1SIauntkkWDvjrPLGMMKBtzalddVPwQkl+dOJGsOUEHjE4vtx54EcCWkDL0Jg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Doug\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerIntegrationTests\\DealerIntegrationTests.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\dsuye\\Source\\Repos\\PlayingCardSimulator\\PokerCardSimulator\\DealerIntegrationTests\\DealerIntegrationTests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dsuye\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
   "logs": []
 }
