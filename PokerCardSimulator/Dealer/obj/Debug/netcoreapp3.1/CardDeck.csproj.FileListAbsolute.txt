@@ -1,9 +1,0 @@
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\bin\Debug\netcoreapp3.1\CardDeck.deps.json
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\bin\Debug\netcoreapp3.1\CardDeck.dll
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\bin\Debug\netcoreapp3.1\CardDeck.pdb
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.csprojAssemblyReference.cache
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.AssemblyInfoInputs.cache
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.AssemblyInfo.cs
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.csproj.CoreCompileInputs.cache
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.dll
-C:\Users\Doug\source\repos\PlayingCardSimulator\PokerCardSimulator\CardDeck\obj\Debug\netcoreapp3.1\CardDeck.pdb
