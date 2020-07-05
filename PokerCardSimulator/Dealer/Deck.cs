@@ -26,16 +26,20 @@ namespace Dealer
 
         public List<Card> Cards { get; set; } = new List<Card>();
 
-        public Deck()
+        public Deck(List<Card> excludedCards = null)
         {
-            CreateDeck();
+            if (excludedCards == null)
+                CreateDeck(new List<Card>());
+            else
+                CreateDeck(excludedCards);
         }
 
-        public void CreateDeck()
+        private void CreateDeck(List<Card> excludedCards)
         {
             foreach (var suit in _suits)
                 foreach (var rank in _ranks)
-                    Cards.Add(new Card() { RankValue = rank, SuitValue = suit });
+                    if (!ContainsCards(excludedCards, new Card() { RankValue = rank, SuitValue = suit }))
+                        Cards.Add(new Card() { RankValue = rank, SuitValue = suit });
         }
 
         public Card GetCard(int slot)
@@ -49,10 +53,18 @@ namespace Dealer
         public Card GetRandomCard()
         {
             Card card = null;
-            while (card == null && Cards.Count > 0) 
-                card = GetCard(RandomNumberGeneratorCustom.GetNumber(Cards.Count)-1);
+            while (card == null && Cards.Count > 0)
+                card = GetCard(RandomNumberGeneratorCustom.GetNumber(Cards.Count) - 1);
 
             return card;
+        }
+
+        public static bool ContainsCards(List<Card> cardList, Card cardMatch)
+        {
+            foreach (var card in cardList)
+                if (card.SuitValue == cardMatch.SuitValue && card.RankValue == cardMatch.RankValue) return true;
+
+            return false;
         }
     }
 }
