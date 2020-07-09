@@ -16,7 +16,7 @@ namespace Dealer
 
         public TexasHoldemView(TexasHoldemBase texasHoldemBase, int playerId)
         {
-            DealerButton = texasHoldemBase.DealerButton;
+            DealerButton = texasHoldemBase.DealerButtonSeatNumber;
             foreach (var otherPlayer in texasHoldemBase.Players)
             {
                 if (playerId == otherPlayer.Id)

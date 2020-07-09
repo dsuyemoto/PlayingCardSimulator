@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,28 +15,34 @@ namespace Dealer
             set { _texasHoldemBase.Players = value; }
         }
 
-        public override int[] Blinds
-        {
-            get { return _texasHoldemBase.Blinds; }
-            set { _texasHoldemBase.Blinds = value; }
-        }
-
         public override int ActionSeatPosition 
         {
             get { return _texasHoldemBase.ActionSeatPosition; }
             set { _texasHoldemBase.ActionSeatPosition = value; }
         }
 
-        public override int DealerButton 
+        public override int DealerButtonSeatNumber 
         {
-            get { return _texasHoldemBase.DealerButton; }
-            set { _texasHoldemBase.DealerButton = value; }
+            get { return _texasHoldemBase.DealerButtonSeatNumber; }
+            set { _texasHoldemBase.DealerButtonSeatNumber = value; }
         }
 
-        public override int StartDealingAtSeatNumber 
+        public override int BigBlindSeatNumber
         {
-            get { return _texasHoldemBase.StartDealingAtSeatNumber; }
-            set { _texasHoldemBase.StartDealingAtSeatNumber = value; }
+            get { return _texasHoldemBase.BigBlindSeatNumber; }
+            set { _texasHoldemBase.BigBlindSeatNumber = value; }
+        }
+
+        public override int SmallBlindSeatNumber
+        {
+            get { return _texasHoldemBase.SmallBlindSeatNumber; }
+            set { _texasHoldemBase.SmallBlindSeatNumber = value; }
+        }
+
+        public override int StartDealingSeatNumber 
+        {
+            get { return _texasHoldemBase.StartDealingSeatNumber; }
+            set { _texasHoldemBase.StartDealingSeatNumber = value; }
         }
 
         public override List<Card> Community
@@ -66,6 +73,18 @@ namespace Dealer
         {
             get { return _texasHoldemBase.Street; }
             set { _texasHoldemBase.Street = value; }
+        }
+
+        public override List<StreetBase> Streets
+        {
+            get { return _texasHoldemBase.Streets; }
+            set { _texasHoldemBase.Streets = value; }
+        }
+
+        public override int StreetCount
+        {
+            get { return _texasHoldemBase.StreetCount; }
+            set { _texasHoldemBase.StreetCount = value; }
         }
 
         public override int PlayerTimeout
@@ -119,18 +138,14 @@ namespace Dealer
             return _texasHoldemBase.SeatPlayer(player, seatNumber);
         }
 
-        public override bool Deal()
-        {
-            return _texasHoldemBase.Deal();
-        }
-
         public override void DealHand()
         {
             _texasHoldemBase.DealHand();
         }
 
-        protected override void SetBlind(double blind, int playerIndex)
+        protected override void SetBlindBets(double blind, int seatNumber)
         {
+            var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
             if (Players[playerIndex].Chips > blind)
             {
                 Players[playerIndex].Bet = Players[playerIndex].Chips;
@@ -138,7 +153,7 @@ namespace Dealer
                 return;
             }
 
-            base.SetBlind(blind, playerIndex);
+            base.SetBlindBets(blind, seatNumber);
         }
     }
 }

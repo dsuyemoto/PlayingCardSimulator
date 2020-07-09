@@ -17,11 +17,11 @@ namespace Dealer
         public List<Card> Cards { get; set; } = new List<Card>();
         public double Chips { get; set; }
         public double Bet { get; set; }
-        public PlayerAction LastAction { get; set; } = PlayerAction.None;
         public PlayerAction CurrentAction { get; set; } = PlayerAction.None;
         public PromptOptions Options { get; set; } = new PromptOptions();
         public int SeatNumber { get; set; }
         public bool SitOut { get; set; } = false;
+        public int Countdown { get; set; }
 
         public Player(int id, double chips)
         {
