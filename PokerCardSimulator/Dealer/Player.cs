@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dealer
 {
-    public class Player
+    public class Player : IObserver<PlayerEvent>
     {
         public enum PlayerAction
         {
@@ -27,6 +28,21 @@ namespace Dealer
         {
             Id = id;
             Chips = chips;
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(PlayerEvent value)
+        {
+            Options = value.Options;
         }
     }
 }
