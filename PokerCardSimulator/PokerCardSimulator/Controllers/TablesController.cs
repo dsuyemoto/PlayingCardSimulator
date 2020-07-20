@@ -15,25 +15,28 @@ namespace PokerCardSimulator.Controllers
     [ApiController]
     public class TablesController : ControllerBase
     {
-        TableManager _tableManager;
-        public TablesController()
-        {
-            _tableManager = new TableManager();
-        }
-
         [Route("{tableid}")]
-        public async Task<IActionResult> GetView([FromQuery]int tableid, int playerid, CancellationToken token)
+        public async Task<IActionResult> GetTexasHoldemTournamentView([FromQuery]int tableid, int playerid, CancellationToken token)
         {
-            var table = await TableManager.GetTexasHoldemTableAsync(tableid);
-
-            return Ok(table.GetTableView(playerid));
+            return Ok(await TableManager.GetTexasHoldemView(tableid, playerid));
         }
 
-        [Route("{tableid}/subscribe")]
-        public IActionResult Post(string tableid)
+        [Route("{tableid}/players/{playerid}/subscribe")]
+        public async Task<IActionResult> Post(int tableid, int playerid, CancellationToken token)
         {
-            var playerObserver = new PlayerObserver();
-            playerObserver.Subscribe(_tableManager);
+            var table = TableManager.GetTable(tableid);         
+            var view = await table.Subscribe(playerid, token);
+
+            return Ok(view);
+        }
+
+        [Route("{tableid}/players/{playerid}/seat/{seatnumber}")]
+        public IActionResult Update(int tableId, int playerid, int seatnumber)
+        {
+            var table = TableManager.GetTable(tableId);
+            var view = table.SeatPlayer(new Player(playerid), seatnumber);
+
+            return Ok(view);
         }
     }
 }

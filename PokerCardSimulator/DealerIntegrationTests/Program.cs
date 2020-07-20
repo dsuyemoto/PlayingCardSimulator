@@ -8,10 +8,8 @@ namespace DealerIntegrationTests
         static void Main(string[] args)
         {
             var _holdem = new TexasHoldemNoLimit(10, new Deck(), 10, 20);
-            _holdem.SeatPlayer(
-                new Player(0, 1000), 1);
-            _holdem.SeatPlayer(
-                new Player(1, 2000), 2);
+            _holdem.SeatPlayer(new Player(0) { Chips = 1000 }, 1);
+            _holdem.SeatPlayer(new Player(1) { Chips = 2000 }, 2);
             _holdem.DealHand();
             Console.WriteLine("Player0:" + _holdem.Players[0].Cards[0].ToString() + _holdem.Players[0].Cards[1].ToString());
             Console.WriteLine("Player1:" + _holdem.Players[1].Cards[0].ToString() + _holdem.Players[1].Cards[1].ToString());

@@ -6,9 +6,9 @@ namespace PokerCardSimulator.Models
     public class GetActionResultDTO
     {
         public string[] AllowedActions { get; set; }
-        public double MinBet { get; set; }
+        public decimal MinBet { get; set; }
 
-        public GetActionResultDTO(PromptOptions promptOptions)
+        public GetActionResultDTO(PlayerOptions promptOptions)
         {
             var allowedActions = new List<string>();
             foreach (var allowedAction in promptOptions.AllowedActions)

@@ -1,30 +1,26 @@
 ﻿using Dealer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PokerCardSimulator
 {
-    public class TableManager : IObservable<PlayerObserverEvent>
+    public class TableManager
     {
         static List<TableBase> _tables = new List<TableBase>();
-        static List<IObserver<PlayerObserverEvent>> _playerObservers;
 
         public enum TableType
         {
             NoLimitHoldem
-        }
-        public TableManager()
-        {
-            _playerObservers = new List<IObserver<PlayerObserverEvent>>();
         }
 
         public static TableBase CreateTable(
             TableType tableType,
             int tableId,
             Deck deck,
-            double smallBlind,
-            double bigBlind,
+            decimal smallBlind,
+            decimal bigBlind,
             int seats,
             int dealerButton)
         {
@@ -42,48 +38,19 @@ namespace PokerCardSimulator
             }
         }
 
-        public async static Task<TexasHoldemBase> GetTexasHoldemTableAsync(int tableId)
+        public static async Task<TexasHoldemView> GetTexasHoldemView(int tableId, int playerId)
         {
-            var table = await Task.Run(() =>
-            {
-                return (TexasHoldemBase)_tables.Find(t => t.TableId == tableId);
-            });
+            var table = await Task.Run(() => (TexasHoldemBase)_tables.Single(t => t.TableId == tableId));
 
-            return table;
+            return new TexasHoldemView(table, playerId);
         }
 
-        public IDisposable Subscribe(IObserver<PlayerObserverEvent> playerObserver)
+        public static TableBase GetTable(int tableId)
         {
-            if (!_playerObservers.Contains(playerObserver))
-                _playerObservers.Add(playerObserver);
+            if (_tables.Exists(t => t.TableId == tableId))
+                return _tables.Single(t => t.TableId == tableId);
 
-            return new Unsubscriber(_playerObservers, playerObserver);
-        }
-
-        public void NotifyObservers(PlayerObserverEvent playerObserverEvent)
-        {
-            foreach (var playerObserver in _playerObservers)
-                playerObserver.OnNext(playerObserverEvent);
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<PlayerObserverEvent>> _playerObservers;
-            private IObserver<PlayerObserverEvent> _playerObserver;
-
-            public Unsubscriber(
-                List<IObserver<PlayerObserverEvent>> playerObservers,
-                IObserver<PlayerObserverEvent> playerObserver
-                )
-            {
-                this._playerObservers = playerObservers;
-                this._playerObserver = playerObserver;
-            }
-            public void Dispose()
-            {
-                if (_playerObserver != null)
-                    _playerObservers.Remove(_playerObserver);
-            }
+            return null;
         }
     }
 }

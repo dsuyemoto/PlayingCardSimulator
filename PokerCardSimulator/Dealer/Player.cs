@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Dealer
 {
-    public class Player : IObserver<PlayerEvent>
+    public class Player
     {
         public enum PlayerAction
         {
@@ -16,33 +15,18 @@ namespace Dealer
 
         public readonly int Id;
         public List<Card> Cards { get; set; } = new List<Card>();
-        public double Chips { get; set; }
-        public double Bet { get; set; }
+        public decimal Chips { get; set; }
+        public decimal Bet { get; set; }
         public PlayerAction CurrentAction { get; set; } = PlayerAction.None;
-        public PromptOptions Options { get; set; } = new PromptOptions();
+        public PlayerOptions Options { get; set; } = new PlayerOptions();
         public int SeatNumber { get; set; }
         public bool SitOut { get; set; } = false;
         public int Countdown { get; set; }
+        public TableViewBase ReturnView { get; set; }
 
-        public Player(int id, double chips)
+        public Player(int id)
         {
             Id = id;
-            Chips = chips;
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(PlayerEvent value)
-        {
-            Options = value.Options;
         }
     }
 }

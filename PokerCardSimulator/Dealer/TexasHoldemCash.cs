@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,12 +7,6 @@ namespace Dealer
     public class TexasHoldemCash : TexasHoldemBase
     {
         TexasHoldemBase _texasHoldemBase;
-
-        public override int ActionSeatPosition 
-        {
-            get { return _texasHoldemBase.ActionSeatPosition; }
-            set { _texasHoldemBase.ActionSeatPosition = value; }
-        }
 
         public override int DealerButtonSeatNumber
         {
@@ -57,28 +49,16 @@ namespace Dealer
             set { _texasHoldemBase.Seats = value; }
         }
 
-        public override double Pot 
+        public override decimal Pot 
         {
             get { return _texasHoldemBase.Pot; }
             set { _texasHoldemBase.Pot = value; }
-        }
-
-        public override StreetName Street 
-        {
-            get { return _texasHoldemBase.Street; }
-            set { _texasHoldemBase.Street = value; }
         }
 
         public override List<StreetBase> Streets
         {
             get { return _texasHoldemBase.Streets; }
             set { _texasHoldemBase.Streets = value; }
-        }
-
-        public override int StreetCount
-        {
-            get { return _texasHoldemBase.StreetCount; }
-            set { _texasHoldemBase.StreetCount = value; }
         }
 
         public override int PlayerTimeout
@@ -105,32 +85,33 @@ namespace Dealer
             set { _texasHoldemBase.Deck = value; }
         }
 
-        public override double LastBet
+        public override decimal LastBet
         {
             get { return _texasHoldemBase.LastBet; }
             set { _texasHoldemBase.LastBet = value; }
         }
 
-        public override double MinBet
+        public override decimal SmallBlind 
         {
-            get { return _texasHoldemBase.MinBet; }
-            set { _texasHoldemBase.MinBet = value; }
+            get { return _texasHoldemBase.SmallBlind; }
+            set { _texasHoldemBase.SmallBlind = value; }
+        }
+        public override decimal BigBlind 
+        {
+            get { return _texasHoldemBase.BigBlind; }
+            set { _texasHoldemBase.BigBlind = value; }
         }
 
-        public override List<Player> Players
-        {
-            get { return _texasHoldemBase.Players; }
-            set { _texasHoldemBase.Players = value; }
-        }
+        public override List<Player> Players => _texasHoldemBase.Players;
 
         public TexasHoldemCash(TexasHoldemBase texasHoldemBase)
         {
             _texasHoldemBase = texasHoldemBase;
         }
 
-        public override TexasHoldemView GetTableView(int playerId)
+        protected override TableViewBase GetTableView(int playerId)
         {
-            return _texasHoldemBase.GetTableView(playerId);
+            return new TexasHoldemView(this, playerId);
         }
 
         public override bool SeatPlayer(Player player, int seatNumber)
@@ -161,12 +142,12 @@ namespace Dealer
             AutoStartGame();
         }
 
-        protected override void SetBlindBets(double blind, int seatNumber)
+        protected override void SetBlindBets(decimal blind, int seatNumber)
         {
-            var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
-            if (Players[playerIndex].Chips > blind)
+            var player = GetPlayer(seatNumber);
+            if (player.Chips > blind)
             {
-                Players[playerIndex].SitOut = true;
+                SitOut(seatNumber);
                 return;
             }
 
@@ -174,9 +155,9 @@ namespace Dealer
         }
         protected void AutoStartGame()
         {
-            if (!IsGameRunning && Players.FindAll(p => p.SitOut = false).Count >= 2)
+            if (!IsGameRunning && GetSittingPlayers().Count >= 2)
                 StartGame();
-            else if (IsGameRunning && Players.FindAll(p => p.SitOut = false).Count < 2)
+            else if (IsGameRunning && GetSittingPlayers().Count < 2)
                 StopGame();
         }
 

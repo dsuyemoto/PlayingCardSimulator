@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static Dealer.Player;
@@ -18,20 +19,48 @@ namespace Dealer
 
         public abstract int TableId { get; set; }
         public abstract int Seats { get; set; }
-        public abstract double Pot { get; set; }
-        public abstract StreetName Street { get; set; }
-        public abstract List<StreetBase> Streets { get;set;}
-        public abstract int StreetCount { get; set; }
+        public abstract decimal Pot { get; set; }
+        public abstract List<StreetBase> Streets { get;set;}       
         public abstract int PlayerTimeout { get; set; }
         public bool IsGameRunning => GetGameStatus();
-        public abstract List<Player> Players { get; set; }
-        public abstract int ActionSeatPosition { get; set; }
+        public abstract List<Player> Players { get; }
         public abstract int StartDealingSeatNumber { get; set; }
         public abstract Task RunningGame { get; set; }
         public abstract Deck Deck { get; set; }
-        public abstract double LastBet { get; set; }
-        public abstract double MinBet { get; set; }
+        public abstract decimal LastBet { get; set; }
         public abstract CancellationTokenSource GameCancellationSource { get; set; }
+
+        private int ActionSeatPosition { get; set; }
+        private int StreetCount { get; set; }
+        private decimal MinBet { get; set; }
+
+        protected abstract TableViewBase GetTableView(int playerId);
+
+        public Player GetPlayer(int seatNumber)
+        {
+            if (!Players.Exists(p => p.SeatNumber == seatNumber)) return null;
+            var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
+            return Players[playerIndex];
+        }
+
+        public List<Player> GetPlayers()
+        {
+            return Players;
+        }
+
+        public void UpdatePlayer(Player player)
+        {
+            if (Players.Exists(p => p.SeatNumber == player.SeatNumber))
+            {
+                var playerIndex = Players.FindIndex(p => p.SeatNumber == player.SeatNumber);
+                Players[playerIndex] = player;
+            }
+        }
+        
+        public List<Player> GetSittingPlayers()
+        {
+            return Players.FindAll(p => p.SitOut == false);
+        }
 
         public virtual bool SeatPlayer(Player player, int seatNumber)
         {
@@ -76,6 +105,26 @@ namespace Dealer
             Players[playerIndex].SitOut = false;
         }
 
+        public async Task<TableViewBase> Subscribe(int playerId, CancellationToken token)
+        {
+            var view = await Task.Run(() =>
+            {
+                if (!Players.Exists(p => p.Id == playerId)) return null;
+
+                var player = Players.Single(p => p.Id == playerId);
+                TableViewBase tableView = null;
+
+                while (tableView == null && !token.IsCancellationRequested)
+                    tableView = player.ReturnView;   
+
+                player.ReturnView = null;
+
+                return tableView;
+            }, token);
+
+            return view;
+        }
+
         public void StartGame()
         {
             GameCancellationSource = new CancellationTokenSource();
@@ -118,7 +167,7 @@ namespace Dealer
             StreetCount = 0;
             while (DealStreet())
             {
-                StartPlayerAction();
+                StartBettingRound();
                 CollectBets();
                 StreetCount++;
             }
@@ -126,57 +175,64 @@ namespace Dealer
             StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
         }
 
-        public virtual void StartPlayerAction()
+        public virtual void StartBettingRound()
         {
+            ActionSeatPosition = StartDealingSeatNumber;
+
             do
             {
                 var playerIndex = Players.FindIndex(p => p.SeatNumber == ActionSeatPosition);
-                SetOptions(playerIndex);
-                Players[playerIndex].Countdown = PlayerTimeout;
-                while (Players[playerIndex].CurrentAction == PlayerAction.None && Players[playerIndex].Countdown > 0)
+                var player = GetPlayer(ActionSeatPosition);
+                SetOptions(ActionSeatPosition);
+                player.Countdown = PlayerTimeout;
+                UpdatePlayer(player);
+                NotifyPlayers();
+                while (player.CurrentAction == PlayerAction.None && player.Countdown > 0)
                 {
                     Thread.Sleep(1000);
-                    Players[playerIndex].Countdown--;
+                    player = GetPlayer(ActionSeatPosition);
+                    player.Countdown--;
+                    UpdatePlayer(player);
                 }
 
-                Players[playerIndex].Chips -= Players[playerIndex].Bet;
+                player.Chips -= player.Bet;
 
-                var currentAction = Players[playerIndex].CurrentAction;
+                var currentAction = player.CurrentAction;
                 if (currentAction == PlayerAction.Bet)
                 {
-                    var bet = Players[playerIndex].Bet;
-                    MinBet = (bet * 2) - LastBet;
-                    LastBet = bet;
+                    MinBet = (player.Bet * 2) - LastBet;
+                    LastBet = player.Bet;
                 }
-                else if (Players[playerIndex].Countdown == 0)
+                else if (player.Countdown == 0)
                 {
-                    Players[playerIndex].SitOut = true;
-                    foreach (var option in Players[playerIndex].Options.AllowedActions)
+                    player.SitOut = true;
+                    foreach (var option in player.Options.AllowedActions)
                         if (option == PlayerAction.Check)
                             currentAction = PlayerAction.Check;
                     if (currentAction != PlayerAction.Check)
                         currentAction = PlayerAction.Fold;
-                    Players[playerIndex].CurrentAction = currentAction;
+                    player.CurrentAction = currentAction;
+                    UpdatePlayer(player);
                 }
             }
             while (IncrementActionSeat());
         }
 
+        public void NotifyPlayers()
+        {
+            foreach (var player in Players)
+                player.ReturnView = GetTableView(player.Id);
+        }
+
         protected virtual int GetNextActiveSeat(int seatNumber)
         {
             var activePlayers = Players.FindAll(p => p.SitOut == false && p.CurrentAction != PlayerAction.Fold);
-            var activeSeat = seatNumber;
-            var playerCount = 0;
-            while (playerCount < activePlayers.Count)
-            {
+            var activeSeat = GetNextSeatNumber(seatNumber, Seats);
+
+            while (!activePlayers.Exists(p => p.SeatNumber == activeSeat))
                 activeSeat = GetNextSeatNumber(activeSeat, activePlayers.Count);
-                if (activePlayers.Exists(p => p.SeatNumber == activeSeat))
-                    return activeSeat;
 
-                playerCount++;
-            }
-
-            return -1;
+            return activeSeat;
         }
 
         protected static int GetNextSeatNumber(int startSeat, int seats)
@@ -188,13 +244,17 @@ namespace Dealer
             return newSeat;
         }
 
-        protected virtual void SetOptionsCheck(int playerIndex)
+        protected virtual void SetOptionsCheck(int seatNumber)
         {
-            Players[playerIndex].Options.AllowedActions = new PlayerAction[]
+            var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
+            Players[playerIndex].Options = new PlayerOptions()
             {
-                PlayerAction.Bet,
-                PlayerAction.Check,
-                PlayerAction.Fold
+                AllowedActions = new PlayerAction[]
+                {
+                    PlayerAction.Bet,
+                    PlayerAction.Check,
+                    PlayerAction.Fold
+                }
             };
         }
 
@@ -216,7 +276,6 @@ namespace Dealer
 
         public void DealPlayerCards(StreetBase street)
         {
-            Street = street.Name;
             int cardsDealt = 0;
             while (cardsDealt < street.NumberOfCards)
             {
@@ -242,7 +301,7 @@ namespace Dealer
             }
         }
 
-        public bool CollectBets()
+        private bool CollectBets()
         {
             var activePlayers = Players.FindAll(s => s.Bet > 0);
             foreach (var activePlayer in activePlayers)
@@ -264,16 +323,17 @@ namespace Dealer
             return false;
         }
 
-        private void SetOptions(int playerIndex)
+        private void SetOptions(int seatNumber)
         {
-            if (LastBet > Players[playerIndex].Bet)
-                SetOptionsCall(playerIndex);
+            if (LastBet > GetPlayer(seatNumber).Bet)
+                SetOptionsCall(seatNumber);
             else
-                SetOptionsCheck(playerIndex);
+                SetOptionsCheck(seatNumber);
         }
 
-        private void SetOptionsCall(int playerIndex)
+        private void SetOptionsCall(int seatNumber)
         {
+            var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
             Players[playerIndex].Options.MinBet = MinBet;
             Players[playerIndex].Options.AllowedActions = new PlayerAction[]
             {

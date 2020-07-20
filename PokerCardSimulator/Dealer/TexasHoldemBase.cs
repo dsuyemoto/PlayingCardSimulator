@@ -5,38 +5,34 @@ namespace Dealer
 {
     public abstract class TexasHoldemBase : TableBase
     {
-        protected double _smallBlind;
-        protected double _bigBlind;
-
+        public abstract decimal SmallBlind { get; set; }
+        public abstract decimal BigBlind { get; set; }
         public abstract int DealerButtonSeatNumber { get; set; }
         public abstract int SmallBlindSeatNumber { get; set; }
         public abstract int BigBlindSeatNumber { get; set; }
         public abstract List<Card> Community { get; set; }
 
-        public TexasHoldemBase()
+        public void InitializeStreets()
         {
             Streets.Add(new PlayerStreet(this, 2, true, StreetName.PreFlop));
             Streets.Add(new CommunityStreet(this, 3, false, StreetName.Flop));
             Streets.Add(new CommunityStreet(this, 1, false, StreetName.Turn));
             Streets.Add(new CommunityStreet(this, 1, false, StreetName.River));
-            Street = StreetName.PreFlop;
         }
 
         public override bool SeatPlayer(Player player, int seatNumber)
         {
             var playerSeated = base.SeatPlayer(player, seatNumber);
-            if (Players.FindAll(p => p.SitOut == false).Count == 1)
-            {
-                var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
-                DealerButtonSeatNumber = Players[playerIndex].SeatNumber;
-            }
+
+            if (GetSittingPlayers().Count == 1)
+                DealerButtonSeatNumber = seatNumber;
 
             return playerSeated; 
         }
 
         public override void SitIn(int seatNumber)
         {
-            if (!BetweenBlinds(seatNumber) && Players.Exists(p => p.SeatNumber == seatNumber))
+            if (!BetweenBlinds(seatNumber) && GetPlayer(seatNumber) != null)
             {
                 base.SitIn(seatNumber);
             }
@@ -44,36 +40,28 @@ namespace Dealer
 
         public override void DealHand()
         {
-            if (Players.FindAll(p => p.SitOut == false).Count < 2) return;
+            if (GetSittingPlayers().Count < 2) return;
 
             SetBlinds();
             base.DealHand();
             MoveButton();
         }
-
-        public override void StartPlayerAction()
+         
+        public override void StartBettingRound()
         {
-            ActionSeatPosition = StartDealingSeatNumber;
-
-            if (Players.FindAll(p => p.SitOut == false).Count > 2)
+            if (GetSittingPlayers().Count > 2)
             {
-                if (_smallBlind > 0)
+                if (SmallBlind > 0)
                     IncrementActionSeat();
-                if (_bigBlind > 0)
+                if (BigBlind > 0)
                     IncrementActionSeat();
             }
 
-            base.StartPlayerAction();
-        }
-
-        public virtual TexasHoldemView GetTableView(int playerId)
-        {
-            return new TexasHoldemView(this, playerId);
+            base.StartBettingRound();
         }
 
         public void DealCommunityCards(StreetBase street)
         {
-            Street = street.Name;
             var cardCount = 0;
             while (cardCount < street.NumberOfCards)
             {
@@ -84,30 +72,33 @@ namespace Dealer
             }
         }
 
-        protected override void SetOptionsCheck(int playerIndex)
+        protected override void SetOptionsCheck(int seatNumber)
         {
-            Players[playerIndex].Options.MinBet = _bigBlind;
-            base.SetOptionsCheck(playerIndex);
+            var player = GetPlayer(seatNumber);
+            player.Options.MinBet = BigBlind;
+            UpdatePlayer(player);
+            base.SetOptionsCheck(seatNumber);
         }
 
-        protected virtual void SetBlindBets(double blind, int seatNumber)
+        protected virtual void SetBlindBets(decimal blind, int seatNumber)
         {
-            if (Players.Exists(p => p.SeatNumber == seatNumber))
+            var player = GetPlayer(seatNumber);
+            if (player != null)
             {
-                var playerIndex = Players.FindIndex(p => p.SeatNumber == seatNumber);
-                Players[playerIndex].Bet = blind;
-                Players[playerIndex].Chips -= blind;
+                player.Bet = blind;
+                player.Chips -= blind;
+                UpdatePlayer(player);
                 LastBet = blind;
             }
         }
 
         private void SetBlinds()
         {
-            if (Players.FindAll(p => p.SitOut == false).Count < 2) return;
+            if (GetSittingPlayers().Count < 2) return;
 
-            if (Players.FindAll(p => p.SitOut == false).Count == 2)
+            if (GetSittingPlayers().Count == 2)
             {
-                if (Players.Exists(p => p.SeatNumber == DealerButtonSeatNumber))
+                if (GetPlayer(DealerButtonSeatNumber) != null)
                 {
                     if (SmallBlindSeatNumber == 0)
                         SmallBlindSeatNumber = DealerButtonSeatNumber;
@@ -123,7 +114,7 @@ namespace Dealer
             }
             else
             {
-                if (Players.Exists(p => p.SeatNumber == DealerButtonSeatNumber))
+                if (GetPlayer(DealerButtonSeatNumber) != null)
                 {
                     if (SmallBlindSeatNumber == 0)
                         SmallBlindSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
@@ -138,17 +129,17 @@ namespace Dealer
                 }
             }
 
-            SetBlindBets(_smallBlind, SmallBlindSeatNumber);
-            SetBlindBets(_bigBlind, BigBlindSeatNumber);
+            SetBlindBets(SmallBlind, SmallBlindSeatNumber);
+            SetBlindBets(BigBlind, BigBlindSeatNumber);
         }
 
         private void MoveButton()
         {
-            if (Players.Count > 2)
+            if (GetPlayers().Count > 2)
             {
-                if (Players.Exists(p => p.SeatNumber == SmallBlindSeatNumber))
+                if (GetPlayer(SmallBlindSeatNumber) != null)
                     DealerButtonSeatNumber = SmallBlindSeatNumber;
-                if (Players.Exists(p => p.SeatNumber == BigBlindSeatNumber))
+                if (GetPlayer(BigBlindSeatNumber) != null)
                     SmallBlindSeatNumber = BigBlindSeatNumber;
  
                 BigBlindSeatNumber = GetNextActiveSeat(BigBlindSeatNumber);
@@ -164,18 +155,18 @@ namespace Dealer
 
         private bool BetweenBlinds(int seatNumber)
         {
-            if (!Players.Exists(p => p.SeatNumber == DealerButtonSeatNumber)) return false;
+            if (GetPlayer(DealerButtonSeatNumber) == null) return false;
 
-            var activePlayers = Players.FindAll(p => p.SitOut == false);
+            var activePlayers = GetSittingPlayers();
             var orderedPlayers = activePlayers.OrderBy(p => p.SeatNumber).ToList();
             var playersOrderedByButton = new List<Player>();
             var startingSeatNumber = DealerButtonSeatNumber;
             for (var i =0;i < orderedPlayers.Count; i++)
             {
-                var playerIndex = Players.FindIndex(p => p.SeatNumber == startingSeatNumber);
-                if (playerIndex > 0)
+                var player = GetPlayer(startingSeatNumber);
+                if (player != null)
                 {
-                    playersOrderedByButton.Add(Players[playerIndex]);
+                    playersOrderedByButton.Add(player);
                     startingSeatNumber = GetNextActiveSeat(startingSeatNumber);
                 }
             }

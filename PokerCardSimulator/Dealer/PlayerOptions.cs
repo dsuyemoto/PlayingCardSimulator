@@ -3,9 +3,9 @@ using static Dealer.Player;
 
 namespace Dealer
 {
-    public class PromptOptions
+    public class PlayerOptions
     {
         public PlayerAction[] AllowedActions { get; set; }
-        public double MinBet { get; set; }
+        public decimal MinBet { get; set; }
     }
 }
