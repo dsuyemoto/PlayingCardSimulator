@@ -157,7 +157,7 @@ namespace Dealer.Tests
         }
 
         [Test]
-        public void StartBettingRound_3PlayersRaise_AreEqual()
+        public void StartBettingRound_3PlayersRaise_AreEqualTest()
         {
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
@@ -171,6 +171,29 @@ namespace Dealer.Tests
             _holdem.Players[2].Bet = BIGBLIND;
 
             _holdem.StartBettingRound();
+
+            Assert.Fail();
+        }
+
+        [Test]
+        public void Subscribe_View_AreEqualTest()
+        {
+            var allowedActions = new PlayerAction[] { PlayerAction.Bet, PlayerAction.Call, PlayerAction.Fold };
+            _holdem.SitIn(_player1.SeatNumber);
+            _holdem.SitIn(_player2.SeatNumber);
+            _player1.CurrentAction = PlayerAction.Call;
+            _holdem.UpdatePlayer(_player1);
+            _player2.CurrentAction = PlayerAction.Check;
+            _holdem.UpdatePlayer(_player2);
+            var task = _holdem.Subscribe(_player1.Id, new System.Threading.CancellationToken());
+
+            _holdem.SetBlinds();
+            _holdem.StartBettingRound();
+            var view = task.Result;
+
+            Assert.AreEqual(PlayerAction.Bet, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[0]);
+            Assert.AreEqual(PlayerAction.Call, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[1]);
+            Assert.AreEqual(PlayerAction.Fold, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[2]);
         }
 
         //[Test]

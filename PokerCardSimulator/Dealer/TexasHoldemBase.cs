@@ -92,7 +92,7 @@ namespace Dealer
             }
         }
 
-        private void SetBlinds()
+        public void SetBlinds()
         {
             if (GetSittingPlayers().Count < 2) return;
 

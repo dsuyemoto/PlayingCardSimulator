@@ -14,7 +14,7 @@ namespace Dealer
         public override int TableId { get; set ; }
         public override int Seats { get; set; }
         public override decimal Pot { get; set; }
-        public override List<StreetBase> Streets { get; set; } = new List<StreetBase>();
+        public override Streets Streets { get; set; } = new Streets();
         public override int PlayerTimeout { get; set; }
         public override Task RunningGame { get; set; }
         public override Deck Deck { get; set; }

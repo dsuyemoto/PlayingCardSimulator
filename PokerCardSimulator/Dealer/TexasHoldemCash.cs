@@ -55,7 +55,7 @@ namespace Dealer
             set { _texasHoldemBase.Pot = value; }
         }
 
-        public override List<StreetBase> Streets
+        public override Streets Streets
         {
             get { return _texasHoldemBase.Streets; }
             set { _texasHoldemBase.Streets = value; }
@@ -101,7 +101,6 @@ namespace Dealer
             get { return _texasHoldemBase.BigBlind; }
             set { _texasHoldemBase.BigBlind = value; }
         }
-
         public override List<Player> Players => _texasHoldemBase.Players;
 
         public TexasHoldemCash(TexasHoldemBase texasHoldemBase)
@@ -145,7 +144,7 @@ namespace Dealer
         protected override void SetBlindBets(decimal blind, int seatNumber)
         {
             var player = GetPlayer(seatNumber);
-            if (player.Chips > blind)
+            if (player.Chips < blind)
             {
                 SitOut(seatNumber);
                 return;

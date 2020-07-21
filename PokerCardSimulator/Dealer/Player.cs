@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dealer
 {
@@ -24,9 +25,29 @@ namespace Dealer
         public int Countdown { get; set; }
         public TableViewBase ReturnView { get; set; }
 
+        public event EventHandler WaitForTurn;
+        public event EventHandler WaitForPlayerResponse;
+
         public Player(int id)
         {
             Id = id;
+        }
+
+        protected virtual void OnWaitForTurn(object sender)
+        {
+            var handler = WaitForTurn;
+            handler?.Invoke(sender, EventArgs.Empty);
+        }
+
+        protected virtual void OnWaitForPlayerResponse(object sender, EventArgs e)
+        {
+            var handler = WaitForPlayerResponse;
+            handler?.Invoke(sender, e);
+        }
+
+        public void Notify(TableBase tableBase)
+        {
+            OnWaitForTurn(tableBase);
         }
     }
 }

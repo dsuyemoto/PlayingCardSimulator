@@ -20,7 +20,7 @@ namespace Dealer
         public abstract int TableId { get; set; }
         public abstract int Seats { get; set; }
         public abstract decimal Pot { get; set; }
-        public abstract List<StreetBase> Streets { get;set;}       
+        public abstract Streets Streets { get; set;}       
         public abstract int PlayerTimeout { get; set; }
         public bool IsGameRunning => GetGameStatus();
         public abstract List<Player> Players { get; }
@@ -31,7 +31,6 @@ namespace Dealer
         public abstract CancellationTokenSource GameCancellationSource { get; set; }
 
         private int ActionSeatPosition { get; set; }
-        private int StreetCount { get; set; }
         private decimal MinBet { get; set; }
 
         protected abstract TableViewBase GetTableView(int playerId);
@@ -107,17 +106,20 @@ namespace Dealer
 
         public async Task<TableViewBase> Subscribe(int playerId, CancellationToken token)
         {
+            if (!Players.Exists(p => p.Id == playerId)) return null;
+
+            var player = Players.Single(p => p.Id == playerId);
+            TableViewBase tableView = null;
+
+            player.WaitForTurn += (s, e) =>
+            {
+                var table = (TableBase)s;
+                tableView = table.GetTableView(player.Id);
+            };
+
             var view = await Task.Run(() =>
             {
-                if (!Players.Exists(p => p.Id == playerId)) return null;
-
-                var player = Players.Single(p => p.Id == playerId);
-                TableViewBase tableView = null;
-
-                while (tableView == null && !token.IsCancellationRequested)
-                    tableView = player.ReturnView;   
-
-                player.ReturnView = null;
+                while (tableView == null && !token.IsCancellationRequested) { }
 
                 return tableView;
             }, token);
@@ -131,7 +133,8 @@ namespace Dealer
 
             RunningGame = Task.Run(() =>
             {
-                while (!GameCancellationSource.Token.IsCancellationRequested && Players.FindAll(p => p.SitOut = false).Count >= 2)
+                while (!GameCancellationSource.Token.IsCancellationRequested 
+                && Players.FindAll(p => p.SitOut = false).Count >= 2)
                 {
                     DealHand();
                 }
@@ -148,28 +151,17 @@ namespace Dealer
         {
             if (Players.FindAll(p => p.SitOut == false).Count < 2) return false;
 
-            if (StreetCount < Streets.Count)
-            {
-                Streets[StreetCount].DealCards();
-                StreetCount++;
-
-                return true;
-            }
-            StreetCount = 0;
-
-            return false;
+            return Streets.DealCards();
         }
 
         public virtual void DealHand()
         {
             if (Players.FindAll(p => p.SitOut == false).Count < 2) return;
 
-            StreetCount = 0;
             while (DealStreet())
             {
                 StartBettingRound();
                 CollectBets();
-                StreetCount++;
             }
 
             StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
@@ -221,7 +213,7 @@ namespace Dealer
         public void NotifyPlayers()
         {
             foreach (var player in Players)
-                player.ReturnView = GetTableView(player.Id);
+                player.Notify(this);
         }
 
         protected virtual int GetNextActiveSeat(int seatNumber)
