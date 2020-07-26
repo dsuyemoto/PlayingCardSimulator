@@ -206,6 +206,9 @@ namespace Dealer
                     player.CurrentAction = currentAction;
                     UpdatePlayer(player);
                 }
+
+                player.CurrentAction = PlayerAction.None;
+                UpdatePlayer(player);
             }
             while (IncrementActionSeat());
         }

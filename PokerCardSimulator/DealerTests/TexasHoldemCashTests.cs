@@ -171,12 +171,6 @@ namespace Dealer.Tests
             _holdem.SitIn(_player2.SeatNumber);
             _holdem.SeatPlayer(_player3, 3);
             _holdem.SitIn(_player3.SeatNumber);
-            _player1.CurrentAction = PlayerAction.Call;
-            _holdem.Players[0].Bet = BIGBLIND;
-            _holdem.Players[1].CurrentAction = PlayerAction.Check;
-            _holdem.Players[1].Bet = BIGBLIND;
-            _holdem.Players[2].CurrentAction = PlayerAction.Call;
-            _holdem.Players[2].Bet = BIGBLIND;
 
             _holdem.StartBettingRound();
 
@@ -197,11 +191,6 @@ namespace Dealer.Tests
 
             _holdem.SetBlinds();
             _holdem.StartBettingRound();
-            var view = task.Result;
-
-            Assert.AreEqual(PlayerAction.Bet, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[0]);
-            Assert.AreEqual(PlayerAction.Call, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[1]);
-            Assert.AreEqual(PlayerAction.Fold, view.Players.Single(p => p.Id == _player1.Id).Options.AllowedActions[2]);
         }
 
         //[Test]
