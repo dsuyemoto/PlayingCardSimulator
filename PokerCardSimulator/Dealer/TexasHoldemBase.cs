@@ -12,7 +12,7 @@ namespace Dealer
         public abstract int BigBlindSeatNumber { get; set; }
         public abstract List<Card> Community { get; set; }
 
-        public void InitializeStreets()
+        protected void InitializeStreets()
         {
             Streets.Add(new PlayerStreet(this, 2, true, StreetName.PreFlop));
             Streets.Add(new CommunityStreet(this, 3, false, StreetName.Flop));
@@ -20,22 +20,10 @@ namespace Dealer
             Streets.Add(new CommunityStreet(this, 1, false, StreetName.River));
         }
 
-        public override bool SeatPlayer(Player player, int seatNumber)
-        {
-            var playerSeated = base.SeatPlayer(player, seatNumber);
-
-            if (GetSittingPlayers().Count == 1)
-                DealerButtonSeatNumber = seatNumber;
-
-            return playerSeated; 
-        }
-
         public override void SitIn(int seatNumber)
         {
             if (!BetweenBlinds(seatNumber) && GetPlayer(seatNumber) != null)
-            {
                 base.SitIn(seatNumber);
-            }
         }
 
         public override void DealHand()
@@ -49,12 +37,17 @@ namespace Dealer
          
         public override void StartBettingRound()
         {
+            StartDealingSeatNumber = DealerButtonSeatNumber;
+
             if (GetSittingPlayers().Count > 2)
+                StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
+
+            if (Streets.CurrentStreet == StreetName.PreFlop)
             {
-                if (SmallBlind > 0)
-                    IncrementActionSeat();
-                if (BigBlind > 0)
-                    IncrementActionSeat();
+                if (SmallBlindSeatNumber > 0)
+                    StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
+                if (BigBlindSeatNumber > 0)
+                    StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
             }
 
             base.StartBettingRound();
@@ -80,7 +73,7 @@ namespace Dealer
             base.SetOptionsCheck(seatNumber);
         }
 
-        protected virtual void SetBlindBets(decimal blind, int seatNumber)
+        protected virtual void SetBlindBet(decimal blind, int seatNumber)
         {
             var player = GetPlayer(seatNumber);
             if (player != null)
@@ -98,44 +91,29 @@ namespace Dealer
 
             if (GetSittingPlayers().Count == 2)
             {
-                if (GetPlayer(DealerButtonSeatNumber) != null)
+                if (GetPlayer(DealerButtonSeatNumber) == null)
                 {
-                    if (SmallBlindSeatNumber == 0)
-                        SmallBlindSeatNumber = DealerButtonSeatNumber;
-                    if (BigBlindSeatNumber == 0)
-                        BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
-                }
-                else
-                {
-                    SmallBlindSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
+                    DealerButtonSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
+                    SmallBlindSeatNumber = DealerButtonSeatNumber;
                     BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
-                    DealerButtonSeatNumber = SmallBlindSeatNumber;
-                }             
+                }
+
+                SmallBlindSeatNumber = DealerButtonSeatNumber;
+                BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
             }
             else
             {
-                if (GetPlayer(DealerButtonSeatNumber) != null)
-                {
-                    if (SmallBlindSeatNumber == 0)
-                        SmallBlindSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
-                    if (BigBlindSeatNumber == 0)
-                        BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
-                }
-                else
-                {
-                    DealerButtonSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
-                    SmallBlindSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
-                    BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
-                }
+                BigBlindSeatNumber = GetNextActiveSeat(SmallBlindSeatNumber);
+                SmallBlindSeatNumber = GetNextActiveSeat(DealerButtonSeatNumber);
             }
 
-            SetBlindBets(SmallBlind, SmallBlindSeatNumber);
-            SetBlindBets(BigBlind, BigBlindSeatNumber);
+            SetBlindBet(SmallBlind, SmallBlindSeatNumber);
+            SetBlindBet(BigBlind, BigBlindSeatNumber);
         }
 
         private void MoveButton()
         {
-            if (GetPlayers().Count > 2)
+            if (Players.Count > 2)
             {
                 if (GetPlayer(SmallBlindSeatNumber) != null)
                     DealerButtonSeatNumber = SmallBlindSeatNumber;
@@ -160,14 +138,14 @@ namespace Dealer
             var activePlayers = GetSittingPlayers();
             var orderedPlayers = activePlayers.OrderBy(p => p.SeatNumber).ToList();
             var playersOrderedByButton = new List<Player>();
-            var startingSeatNumber = DealerButtonSeatNumber;
+            var nextSeatNumber = DealerButtonSeatNumber;
             for (var i =0;i < orderedPlayers.Count; i++)
             {
-                var player = GetPlayer(startingSeatNumber);
+                var player = GetPlayer(nextSeatNumber);
                 if (player != null)
                 {
                     playersOrderedByButton.Add(player);
-                    startingSeatNumber = GetNextActiveSeat(startingSeatNumber);
+                    nextSeatNumber = GetNextActiveSeat(nextSeatNumber);
                 }
             }
 

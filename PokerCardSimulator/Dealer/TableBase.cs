@@ -14,7 +14,8 @@ namespace Dealer
             PreFlop,
             Flop,
             Turn,
-            River
+            River,
+            Ended
         }
 
         public abstract int TableId { get; set; }
@@ -42,9 +43,9 @@ namespace Dealer
             return Players[playerIndex];
         }
 
-        public List<Player> GetPlayers()
+        public List<Player> GetActivePlayers()
         {
-            return Players;
+            return Players.FindAll(p => p.SitOut == false && p.CurrentAction == PlayerAction.Fold);
         }
 
         public void UpdatePlayer(Player player)
@@ -173,19 +174,18 @@ namespace Dealer
 
             do
             {
-                var playerIndex = Players.FindIndex(p => p.SeatNumber == ActionSeatPosition);
                 var player = GetPlayer(ActionSeatPosition);
+                if (player == null)
+                {
+                    ActionSeatPosition = GetNextActiveSeat(ActionSeatPosition);
+                    player = GetPlayer(ActionSeatPosition);
+                }
+
                 SetOptions(ActionSeatPosition);
                 player.Countdown = PlayerTimeout;
                 UpdatePlayer(player);
                 NotifyPlayers();
-                while (player.CurrentAction == PlayerAction.None && player.Countdown > 0)
-                {
-                    Thread.Sleep(1000);
-                    player = GetPlayer(ActionSeatPosition);
-                    player.Countdown--;
-                    UpdatePlayer(player);
-                }
+                player = WaitForPlayer(player);
 
                 player.Chips -= player.Bet;
 
@@ -214,6 +214,19 @@ namespace Dealer
         {
             foreach (var player in Players)
                 player.Notify(this);
+        }
+
+        private Player WaitForPlayer(Player player)
+        {
+            while (player.CurrentAction == PlayerAction.None && player.Countdown > 0)
+            {
+                Thread.Sleep(1000);
+                player = GetPlayer(ActionSeatPosition);
+                player.Countdown--;
+                UpdatePlayer(player);
+            }
+
+            return player;
         }
 
         protected virtual int GetNextActiveSeat(int seatNumber)

@@ -8,9 +8,13 @@ namespace Dealer
         private List<StreetBase> _streets = new List<StreetBase>();
         private int _counter = 0;
 
-        public StreetName CurrentStreet 
-        {
-            get { return _streets[_counter].Name; } 
+        public StreetName CurrentStreet {
+            get {
+                if (_counter < _streets.Count)
+                    return _streets[_counter].Name;
+                else
+                    return StreetName.Ended;
+            }
         }
 
         public Streets()
@@ -25,7 +29,7 @@ namespace Dealer
 
         public bool DealCards()
         {
-            if (_counter < _streets.Count)
+            if (CurrentStreet != StreetName.Ended)
             {
                 _streets[_counter].DealCards();
                 _counter++;

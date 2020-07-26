@@ -17,7 +17,15 @@ namespace Dealer
             foreach (var player in tableBase.Players)
             {
                 if (player.Id != playerId)
-                    player.Cards.Clear();
+                {
+                    var cards = new List<Card>();
+
+                    foreach (var card in player.Cards)
+                        if (!card.IsHidden)
+                            cards.Add(card);
+
+                    player.Cards = cards;
+                }
 
                 Players.Add(player);
             }

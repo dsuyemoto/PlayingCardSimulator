@@ -33,6 +33,9 @@ namespace Dealer.Tests
             _player2 = new Player(PLAYERID2) { Chips = PLAYERCHIPS2 };
             _player3 = new Player(PLAYERID3) { Chips = PLAYERCHIPS3 };
             _holdem = new TexasHoldemCash(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON));
+            var streets = new Streets();
+            streets.Add(new PlayerStreet(_holdem, 2, true, TableBase.StreetName.PreFlop));
+            _holdem.Streets = streets;
             _holdem.SeatPlayer(_player1, SEAT1);
             _holdem.SitOut(_player1.SeatNumber);
             _holdem.SeatPlayer(_player2, SEAT2);
@@ -110,16 +113,18 @@ namespace Dealer.Tests
         }
 
         [Test]
-        public void StartBettingRound_2Players_AreEqualTest()
+        public void DealHand_2Players_AreEqualTest()
         {
             _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _holdem.Players[0].CurrentAction = PlayerAction.Call;
-            _holdem.Players[0].Bet = BIGBLIND;
-            _holdem.Players[1].CurrentAction = PlayerAction.Check;
-            _holdem.Players[1].Bet = BIGBLIND;
+            _holdem.SitIn(_player2.SeatNumber);          
 
-            _holdem.StartBettingRound();
+            _holdem.DealHand();
+            _player1.CurrentAction = PlayerAction.Call;
+            _player1.Bet = BIGBLIND;
+            _holdem.UpdatePlayer(_player1);
+            _player2.CurrentAction = PlayerAction.Check;
+            _player2.Bet = BIGBLIND;
+            _holdem.UpdatePlayer(_player2);
 
             Assert.AreEqual(PLAYERCHIPS1 - 200, _holdem.Players[0].Chips);
             Assert.AreEqual(PLAYERCHIPS2 - 200, _holdem.Players[1].Chips);
@@ -135,13 +140,16 @@ namespace Dealer.Tests
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
             _holdem.SeatPlayer(_player3, 3);
-            _holdem.SitIn(_player3.SeatNumber);
-            _holdem.Players[0].CurrentAction = PlayerAction.Call;
-            _holdem.Players[0].Bet = BIGBLIND;
-            _holdem.Players[1].CurrentAction = PlayerAction.Check;
-            _holdem.Players[1].Bet = BIGBLIND;
-            _holdem.Players[2].CurrentAction = PlayerAction.Call;
-            _holdem.Players[2].Bet = BIGBLIND;
+            _holdem.SitIn(_player3.SeatNumber);                      
+            _holdem.SetBlinds();
+            _player1.CurrentAction = PlayerAction.Call;
+            _player1.Bet = SMALLBLIND;
+            _holdem.UpdatePlayer(_player1);
+            _player2.CurrentAction = PlayerAction.Check;
+            _holdem.UpdatePlayer(_player2);
+            _player3.CurrentAction = PlayerAction.Call;
+            _player3.Bet = BIGBLIND;
+            _holdem.UpdatePlayer(_player3);
 
             _holdem.StartBettingRound();
 
@@ -163,7 +171,7 @@ namespace Dealer.Tests
             _holdem.SitIn(_player2.SeatNumber);
             _holdem.SeatPlayer(_player3, 3);
             _holdem.SitIn(_player3.SeatNumber);
-            _holdem.Players[0].CurrentAction = PlayerAction.Call;
+            _player1.CurrentAction = PlayerAction.Call;
             _holdem.Players[0].Bet = BIGBLIND;
             _holdem.Players[1].CurrentAction = PlayerAction.Check;
             _holdem.Players[1].Bet = BIGBLIND;

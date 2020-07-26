@@ -105,7 +105,7 @@ namespace Dealer
             _texasHoldemBase.DealHand();
         }
 
-        protected override void SetBlindBets(decimal blind, int seatNumber)
+        protected override void SetBlindBet(decimal blind, int seatNumber)
         {
             var player = GetPlayer(seatNumber);
             if (player.Chips > blind)
@@ -116,7 +116,7 @@ namespace Dealer
                 return;
             }
 
-            base.SetBlindBets(blind, seatNumber);
+            base.SetBlindBet(blind, seatNumber);
         }
 
         protected override TableViewBase GetTableView(int playerId)

@@ -41,6 +41,7 @@ namespace Dealer
             StartDealingSeatNumber = dealerButton;
             Seats = seats;
             PlayerTimeout = playerTimeout;
+
             InitializeStreets();
         }
 
