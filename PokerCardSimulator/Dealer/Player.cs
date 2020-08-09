@@ -25,29 +25,24 @@ namespace Dealer
         public int Countdown { get; set; }
         public TableViewBase ReturnView { get; set; }
 
-        public event EventHandler WaitForTurn;
-        public event EventHandler WaitForPlayerResponse;
+        public event EventHandler PlayerNotified;
+        public event EventHandler PlayerActed;
 
         public Player(int id)
         {
             Id = id;
         }
 
-        protected virtual void OnWaitForTurn(object sender)
+        public virtual void OnPlayerNotified(object sender)
         {
-            var handler = WaitForTurn;
+            var handler = PlayerNotified;
             handler?.Invoke(sender, EventArgs.Empty);
         }
 
-        protected virtual void OnWaitForPlayerResponse(object sender, EventArgs e)
+        public virtual void OnPlayerActed(object sender, EventArgs e)
         {
-            var handler = WaitForPlayerResponse;
+            var handler = PlayerActed;
             handler?.Invoke(sender, e);
-        }
-
-        public void Notify(TableBase tableBase)
-        {
-            OnWaitForTurn(tableBase);
         }
     }
 }

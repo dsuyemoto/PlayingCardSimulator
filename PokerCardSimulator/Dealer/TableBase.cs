@@ -112,7 +112,7 @@ namespace Dealer
             var player = Players.Single(p => p.Id == playerId);
             TableViewBase tableView = null;
 
-            player.WaitForTurn += (s, e) =>
+            player.PlayerNotified += (s, e) =>
             {
                 var table = (TableBase)s;
                 tableView = table.GetTableView(player.Id);
@@ -216,7 +216,7 @@ namespace Dealer
         public void NotifyPlayers()
         {
             foreach (var player in Players)
-                player.Notify(this);
+                player.OnPlayerNotified(this);
         }
 
         private Player WaitForPlayer(Player player)
