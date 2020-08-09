@@ -113,14 +113,6 @@ namespace Dealer
             return new TexasHoldemView(this, playerId);
         }
 
-        public override bool SeatPlayer(Player player, int seatNumber)
-        {
-            var succeeds = base.SeatPlayer(player, seatNumber);
-            AutoStartGame();
-
-            return succeeds;
-        }
-
         public override bool UnseatPlayer(int seatNumber)
         {
             var succeeds = base.UnseatPlayer(seatNumber);
