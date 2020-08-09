@@ -27,17 +27,23 @@ namespace Dealer
             _streets.Add(streetBase);
         }
 
-        public bool DealCards()
+        public void DealCards()
         {
-            if (CurrentStreet != StreetName.Ended)
-            {
-                _streets[_counter].DealCards();
-                _counter++;
+            _streets[_counter].DealCards();
+        }
 
-                return true;
-            }
+        public void StartBettingRound(int startingSeatNumber)
+        {
+            _streets[_counter].StartBettingRound(startingSeatNumber);
+        }
 
-            return false;
+        public bool Next()
+        {
+            _counter++;
+            if (CurrentStreet == StreetName.Ended)
+                return false;
+            
+            return true;
         }
     }
 }

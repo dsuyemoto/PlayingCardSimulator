@@ -95,11 +95,6 @@ namespace Dealer
             _texasHoldemBase = tableBase;
         }
 
-        public override bool SeatPlayer(Player player, int seatNumber)
-        {
-            return _texasHoldemBase.SeatPlayer(player, seatNumber);
-        }
-
         public override void DealHand()
         {
             _texasHoldemBase.DealHand();

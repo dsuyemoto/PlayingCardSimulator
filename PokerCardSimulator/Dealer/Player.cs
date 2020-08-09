@@ -14,6 +14,12 @@ namespace Dealer
             None
         }
 
+        public enum BlindName
+        {
+            Small,
+            Big
+        }
+
         public readonly int Id;
         public List<Card> Cards { get; set; } = new List<Card>();
         public decimal Chips { get; set; }
@@ -24,30 +30,26 @@ namespace Dealer
         public bool SitOut { get; set; } = false;
         public int Countdown { get; set; }
         public TableViewBase ReturnView { get; set; }
+        public System.Timers.Timer Timer { get; set; }
 
-        public event EventHandler WaitForTurn;
-        public event EventHandler WaitForPlayerResponse;
+        public event EventHandler ActionPrompted;
+        public event EventHandler PlayerActed;
 
         public Player(int id)
         {
             Id = id;
         }
 
-        protected virtual void OnWaitForTurn(object sender)
+        public virtual void OnActionPrompted(object sender, ActionPromptedEventArgs actionPromptedEventArgs)
         {
-            var handler = WaitForTurn;
-            handler?.Invoke(sender, EventArgs.Empty);
+            var handler = ActionPrompted;
+            handler?.Invoke(sender, actionPromptedEventArgs);
         }
 
-        protected virtual void OnWaitForPlayerResponse(object sender, EventArgs e)
+        public virtual void OnPlayerActed(object sender, EventArgs e)
         {
-            var handler = WaitForPlayerResponse;
+            var handler = PlayerActed;
             handler?.Invoke(sender, e);
-        }
-
-        public void Notify(TableBase tableBase)
-        {
-            OnWaitForTurn(tableBase);
         }
     }
 }

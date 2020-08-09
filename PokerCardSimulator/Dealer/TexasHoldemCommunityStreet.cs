@@ -2,7 +2,7 @@
 
 namespace Dealer
 {
-    public class CommunityStreet : StreetBase
+    public class TexasHoldemCommunityStreet : StreetBase
     {
         TexasHoldemBase _texasHoldemBase;
 
@@ -10,7 +10,7 @@ namespace Dealer
         public override bool IsHidden { get; set; }
         public override StreetName Name { get; set; }
 
-        public CommunityStreet(TexasHoldemBase texasHoldemBase, int numberOfCards, bool isHidden, StreetName name) : base(numberOfCards, isHidden, name)
+        public TexasHoldemCommunityStreet(TexasHoldemBase texasHoldemBase, int numberOfCards, bool isHidden, StreetName name) : base(numberOfCards, isHidden, name)
         {
             _texasHoldemBase = texasHoldemBase;
         }
@@ -18,6 +18,11 @@ namespace Dealer
         public override void DealCards()
         {
             _texasHoldemBase.DealCommunityCards(this);
+        }
+
+        public override void StartBettingRound(int startingSeatNumber)
+        {
+            _texasHoldemBase.StartBettingRound(startingSeatNumber);
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using static Dealer.Player;
+using static Dealer.TableBase;
 
 namespace Dealer.Tests
 {
     [TestFixture()]
-    public class TexasHoldemCashTests
+    public class TexasHoldemBaseTests
     {
         TexasHoldemBase _holdem;
         Player _player1;
@@ -26,15 +28,19 @@ namespace Dealer.Tests
         const int SEAT3 = 3;
         const int TABLEID = 100;
 
-        [SetUp]
-        public void Setup()
+        public class TableClassProvider
         {
-            _player1 = new Player(PLAYERID1) { Chips = PLAYERCHIPS1 };
-            _player2 = new Player(PLAYERID2) { Chips = PLAYERCHIPS2 };
-            _player3 = new Player(PLAYERID3) { Chips = PLAYERCHIPS3 };
-            _holdem = new TexasHoldemCash(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON));
+            public static IEnumerable<TexasHoldemBase> TableBaseClasses()
+            {
+                yield return new TexasHoldemCash(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON, 300));
+                yield return new TexasHoldemTournament(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON, 300));
+            }
+        }
+
+        private void HoldemSetup()
+        {
             var streets = new Streets();
-            streets.Add(new PlayerStreet(_holdem, 2, true, TableBase.StreetName.PreFlop));
+            streets.Add(new TexasHoldemPlayerStreet(_holdem, 2, true, StreetName.PreFlop));
             _holdem.Streets = streets;
             _holdem.SeatPlayer(_player1, SEAT1);
             _holdem.SitOut(_player1.SeatNumber);
@@ -42,9 +48,47 @@ namespace Dealer.Tests
             _holdem.SitOut(_player2.SeatNumber);
         }
 
-        [Test()]
-        public void Unseat_NoPlayers_IsFalseTest()
+        [SetUp]        
+        public void Setup()
         {
+            _player1 = new Player(PLAYERID1) { Chips = PLAYERCHIPS1 };
+            _player2 = new Player(PLAYERID2) { Chips = PLAYERCHIPS2 };
+            _player3 = new Player(PLAYERID3) { Chips = PLAYERCHIPS3 };
+            _holdem = new TexasHoldemCash(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON, 300));
+            HoldemSetup();
+            _player1.ActionPrompted += (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player1);
+                player.CurrentAction = PlayerAction.Call;
+                player.Bet = BIGBLIND;
+                player.Chips = _player1.Chips - SMALLBLIND;
+                table.UpdatePlayer(player);
+            };
+            _player2.ActionPrompted += (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player2);
+                player.CurrentAction = PlayerAction.Check;
+                player.Bet = BIGBLIND;
+                table.UpdatePlayer(player);
+            };
+            _player3.ActionPrompted += (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player3);
+                player.CurrentAction = PlayerAction.Call;
+                player.Bet = BIGBLIND;
+                player.Chips = _player3.Chips - BIGBLIND;
+                table.UpdatePlayer(player);
+            };
+        }
+
+        [Test, TestCaseSource(typeof(TableClassProvider), "TableBaseClasses")]
+        public void Unseat_NoPlayers_IsFalseTest(TexasHoldemBase texasHoldemBase)
+        {
+            _holdem = texasHoldemBase;
+            HoldemSetup();
             _holdem.UnseatPlayer(SEAT1);
             _holdem.UnseatPlayer(SEAT2);
             _holdem.StartGame();
@@ -68,47 +112,21 @@ namespace Dealer.Tests
         {
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
-            _holdem.DealStreet();
+            _holdem.Streets.Add(new TexasHoldemCommunityStreet(_holdem, 3, false, StreetName.Flop));
+            _holdem.Streets.Add(new TexasHoldemCommunityStreet(_holdem, 1, false, StreetName.Turn));
+            _holdem.Streets.Add(new TexasHoldemCommunityStreet(_holdem, 1, false, StreetName.River));
 
+            _holdem.Streets.DealCards();
+            _holdem.Streets.Next();
             Assert.AreEqual(2, _holdem.Players[0].Cards.Count);
             Assert.AreEqual(2, _holdem.Players[1].Cards.Count);
-        }
-
-        [Test]
-        public void Deal_CommunityCards_AreEqualTest()
-        {
-            _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _holdem.DealStreet();
-            _holdem.DealStreet();
-
+            _holdem.Streets.DealCards();
             Assert.AreEqual(3, _holdem.Community.Count);
-        }
-
-        [Test]
-        public void Deal_TurnCards_AreEqualTest()
-        {
-            _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _holdem.DealStreet();
-            _holdem.DealStreet();
-            var dealt = _holdem.DealStreet();
-
-            Assert.IsTrue(dealt);
+            _holdem.Streets.Next();
+            _holdem.Streets.DealCards();
             Assert.AreEqual(4, _holdem.Community.Count);
-        }
-
-        [Test]
-        public void Deal_RiverCards_AreEqualTest()
-        {
-            _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _holdem.DealStreet();
-            _holdem.DealStreet();
-            _holdem.DealStreet();
-            var dealt = _holdem.DealStreet();
-
-            Assert.IsTrue(dealt);
+            _holdem.Streets.Next();
+            _holdem.Streets.DealCards();
             Assert.AreEqual(5, _holdem.Community.Count);
         }
 
@@ -116,46 +134,31 @@ namespace Dealer.Tests
         public void DealHand_2Players_AreEqualTest()
         {
             _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);          
+            _holdem.SitIn(_player2.SeatNumber);            
 
             _holdem.DealHand();
-            _player1.CurrentAction = PlayerAction.Call;
-            _player1.Bet = BIGBLIND;
-            _holdem.UpdatePlayer(_player1);
-            _player2.CurrentAction = PlayerAction.Check;
-            _player2.Bet = BIGBLIND;
-            _holdem.UpdatePlayer(_player2);
-
+            
             Assert.AreEqual(PLAYERCHIPS1 - 200, _holdem.Players[0].Chips);
             Assert.AreEqual(PLAYERCHIPS2 - 200, _holdem.Players[1].Chips);
             Assert.AreEqual(PlayerAction.Call, _holdem.Players[0].CurrentAction);
             Assert.AreEqual(PlayerAction.Check, _holdem.Players[1].CurrentAction);
-            Assert.AreEqual(200, _holdem.Players[0].Bet);
-            Assert.AreEqual(200, _holdem.Players[1].Bet);
+            Assert.AreEqual(0, _holdem.Players[0].Bet);
+            Assert.AreEqual(0, _holdem.Players[1].Bet);
         }
 
         [Test]
-        public void StartBettingRound_3Players_AreEqualTest()
+        public void DealHand_3Players_AreEqualTest()
         {
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
             _holdem.SeatPlayer(_player3, 3);
-            _holdem.SitIn(_player3.SeatNumber);                      
-            _holdem.SetBlinds();
-            _player1.CurrentAction = PlayerAction.Call;
-            _player1.Bet = SMALLBLIND;
-            _holdem.UpdatePlayer(_player1);
-            _player2.CurrentAction = PlayerAction.Check;
-            _holdem.UpdatePlayer(_player2);
-            _player3.CurrentAction = PlayerAction.Call;
-            _player3.Bet = BIGBLIND;
-            _holdem.UpdatePlayer(_player3);
+            _holdem.SitIn(_player3.SeatNumber);
 
-            _holdem.StartBettingRound();
+            _holdem.DealHand();
 
-            Assert.AreEqual(BIGBLIND, _holdem.Players.Single(p => p.SeatNumber == SEAT1).Bet);
-            Assert.AreEqual(BIGBLIND, _holdem.Players.Single(p => p.SeatNumber == SEAT2).Bet);
-            Assert.AreEqual(BIGBLIND, _holdem.Players.Single(p => p.SeatNumber == SEAT3).Bet);
+            Assert.AreEqual(0, _holdem.Players.Single(p => p.SeatNumber == SEAT1).Bet);
+            Assert.AreEqual(0, _holdem.Players.Single(p => p.SeatNumber == SEAT2).Bet);
+            Assert.AreEqual(0, _holdem.Players.Single(p => p.SeatNumber == SEAT3).Bet);
             Assert.AreEqual(PlayerAction.Call, _holdem.Players.Single(p => p.SeatNumber == SEAT1).CurrentAction);
             Assert.AreEqual(PLAYERCHIPS1 - 200, _holdem.Players.Single(p => p.SeatNumber == SEAT1).Chips);
             Assert.AreEqual(PlayerAction.Check, _holdem.Players.Single(p => p.SeatNumber == SEAT2).CurrentAction);
@@ -164,41 +167,12 @@ namespace Dealer.Tests
             Assert.AreEqual(PLAYERCHIPS3 - 200, _holdem.Players.Single(p => p.SeatNumber == SEAT3).Chips);
         }
 
-        [Test]
-        public void StartBettingRound_3PlayersRaise_AreEqualTest()
-        {
-            _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _holdem.SeatPlayer(_player3, 3);
-            _holdem.SitIn(_player3.SeatNumber);
-
-            _holdem.StartBettingRound();
-
-            Assert.Fail();
-        }
-
-        [Test]
-        public void Subscribe_View_AreEqualTest()
-        {
-            var allowedActions = new PlayerAction[] { PlayerAction.Bet, PlayerAction.Call, PlayerAction.Fold };
-            _holdem.SitIn(_player1.SeatNumber);
-            _holdem.SitIn(_player2.SeatNumber);
-            _player1.CurrentAction = PlayerAction.Call;
-            _holdem.UpdatePlayer(_player1);
-            _player2.CurrentAction = PlayerAction.Check;
-            _holdem.UpdatePlayer(_player2);
-            var task = _holdem.Subscribe(_player1.Id, new System.Threading.CancellationToken());
-
-            _holdem.SetBlinds();
-            _holdem.StartBettingRound();
-        }
-
         //[Test]
         //public void GetTableView_TableProperties_AreEqualTest()
         //{
         //    _holdem.SitIn(_player1.SeatNumber);
         //    _holdem.SitIn(_player2.SeatNumber);
-        //    _holdem.DealStreet();
+        //    _holdem.Streets.DealCards();
 
         //    var tableView = _holdem.GetTableView(PLAYERID1);
 

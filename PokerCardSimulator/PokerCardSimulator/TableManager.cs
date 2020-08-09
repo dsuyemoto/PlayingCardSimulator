@@ -8,7 +8,7 @@ namespace PokerCardSimulator
 {
     public class TableManager
     {
-        static List<TableBase> _tables = new List<TableBase>();
+        static List<TexasHoldemBase> _tables = new List<TexasHoldemBase>();
 
         public enum TableType
         {
@@ -40,12 +40,12 @@ namespace PokerCardSimulator
 
         public static async Task<TexasHoldemView> GetTexasHoldemView(int tableId, int playerId)
         {
-            var table = await Task.Run(() => (TexasHoldemBase)_tables.Single(t => t.TableId == tableId));
+            var table = await Task.Run(() => _tables.Single(t => t.TableId == tableId));
 
             return new TexasHoldemView(table, playerId);
         }
 
-        public static TableBase GetTable(int tableId)
+        public static TexasHoldemBase GetTable(int tableId)
         {
             if (_tables.Exists(t => t.TableId == tableId))
                 return _tables.Single(t => t.TableId == tableId);
