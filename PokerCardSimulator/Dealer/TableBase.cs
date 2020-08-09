@@ -218,9 +218,11 @@ namespace Dealer
 
         private void UpdatePlayerBet(Player player)
         {
-            foreach (var player in Players)
-                player.Notify(this);
-        }
+            if (player.CurrentAction == PlayerAction.Bet)
+            {
+                MinBet = (player.Bet * 2) - LastBet;
+                LastBet = player.Bet;
+            }
 
             UpdatePlayer(player);
         }

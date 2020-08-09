@@ -40,13 +40,13 @@ namespace Dealer
             Id = id;
         }
 
-        protected virtual void OnWaitForTurn(object sender)
+        public void OnActionPrompted(object sender, ActionPromptedEventArgs actionPromptedEventArgs)
         {
-            var handler = WaitForTurn;
-            handler?.Invoke(sender, EventArgs.Empty);
+            var handler = ActionPrompted;
+            handler?.Invoke(sender, actionPromptedEventArgs);
         }
 
-        public virtual void OnPlayerActed(object sender, EventArgs e)
+        public void OnPlayerActed(object sender, EventArgs e)
         {
             var handler = PlayerActed;
             handler?.Invoke(sender, e);
