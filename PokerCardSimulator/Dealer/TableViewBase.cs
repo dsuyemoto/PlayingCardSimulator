@@ -7,7 +7,7 @@ namespace Dealer
         public abstract int TableId { get; }
         public abstract int Seats { get; }
         public abstract decimal Pot { get; }
-        public abstract int PlayerTimeout { get; }
+        public abstract double PlayerTimeoutMilliseconds { get; }
         public List<Player> Players { get; }
 
         public TableViewBase(TableBase tableBase, int playerId)

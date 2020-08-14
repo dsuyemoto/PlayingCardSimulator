@@ -27,7 +27,7 @@ namespace Dealer
         public PlayerAction CurrentAction { get; set; } = PlayerAction.None;
         public PlayerOptions Options { get; set; } = new PlayerOptions();
         public int SeatNumber { get; set; }
-        public bool SitOut { get; set; } = false;
+        public bool SittingOut { get; set; } = false;
         public int Countdown { get; set; }
         public TableViewBase ReturnView { get; set; }
         public System.Timers.Timer Timer { get; set; }

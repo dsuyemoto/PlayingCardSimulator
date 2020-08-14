@@ -7,7 +7,7 @@ namespace Dealer
         public override int TableId { get; }
         public override int Seats { get; }
         public override decimal Pot { get; }
-        public override int PlayerTimeout { get; }
+        public override double PlayerTimeoutMilliseconds { get; }
 
         public abstract List<Card> Community { get; }
         public abstract int DealerButtonSeatNumber { get; }

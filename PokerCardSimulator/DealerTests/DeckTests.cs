@@ -161,5 +161,40 @@ namespace Dealer.Tests
 
             Assert.IsFalse(Deck.ContainsCards(_deck.Cards, excludedCard));
         }
+
+        [Test]
+        public void RankHands_Cards_InOrderTest()
+        {
+            var hand1 = new Card[] { 
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.King, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Queen, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Ten, SuitValue = Suit.Clubs }
+            };
+            var hand2 = new Card[] {
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Hearts },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Diamonds }
+            };
+            var hand3 = new Card[] {
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Two, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Three, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Four, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Five, SuitValue = Suit.Spades }
+            };
+
+            var hands = new Dictionary<int, Card[]>();
+            hands.Add(2, hand2);
+            hands.Add(1, hand1);
+            hands.Add(3, hand3);
+
+            var bestHand = Deck.BestHand(hands);
+
+            Assert.AreEqual(hand1, bestHand);
+        }
     }
 }

@@ -30,5 +30,15 @@ namespace Dealer
 
             _texasHoldemBase.StartBettingRound(startingSeatNumber);
         }
+
+        public override void CollectBets()
+        {
+            _texasHoldemBase.CollectBets();
+        }
+
+        public override void PayWinner()
+        {
+            _texasHoldemBase.PayWinner();
+        }
     }
 }

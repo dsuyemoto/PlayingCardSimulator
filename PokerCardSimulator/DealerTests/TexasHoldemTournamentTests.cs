@@ -51,19 +51,12 @@ namespace Dealer.Tests
         }
 
         [Test()]
-        public void DealStreet_Cards_AreEqualTest()
+        public void DealCards_Cards_AreEqualTest()
         {            
             _texasHoldemTournament.Streets.DealCards();
 
             Assert.AreEqual(2, _texasHoldemTournament.Players.Single(p => p.SeatNumber == SEAT2).Cards.Count);
             Assert.AreEqual(2, _texasHoldemTournament.Players.Single(p => p.SeatNumber == SEAT3).Cards.Count);
-        }
-
-        [Test]
-        public void StartBettingRound_Blinds_AreEqualTest()
-        {
-            _texasHoldemTournament.StartBettingRound(DEALERBUTTONSEATNUMBER);
-
             Assert.AreEqual(SMALLBLIND, _texasHoldemTournament.Players.Single(p => p.SeatNumber == 2).Bet);
             Assert.AreEqual(BIGBLIND, _texasHoldemTournament.Players.Single(p => p.SeatNumber == 3).Bet);
         }

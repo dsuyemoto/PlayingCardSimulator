@@ -15,14 +15,13 @@ namespace Dealer
         public override int Seats { get; set; }
         public override decimal Pot { get; set; }
         public override Streets Streets { get; set; } = new Streets();
-        public override int PlayerTimeout { get; set; }
-        public override Task RunningGame { get; set; }
+        public override double PlayerTimeoutMilliseconds { get; set; }
         public override Deck Deck { get; set; }
         public override decimal LastBet { get; set; }
-        public override CancellationTokenSource GameCancellationSource { get; set; }
         public override decimal SmallBlind { get; set; }
         public override decimal BigBlind { get; set; }
         public override List<Player> Players { get; } = new List<Player>();
+        public override bool AutoStartEnabled { get; set; }
 
         public TexasHoldemNoLimit(
             int tableId,
@@ -40,7 +39,7 @@ namespace Dealer
             DealerButtonSeatNumber = dealerButton;
             StartDealingSeatNumber = dealerButton;
             Seats = seats;
-            PlayerTimeout = playerTimeout;
+            PlayerTimeoutMilliseconds = playerTimeout;
 
             InitializeStreets();
         }

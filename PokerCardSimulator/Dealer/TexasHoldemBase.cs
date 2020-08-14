@@ -11,6 +11,7 @@ namespace Dealer
         public abstract int SmallBlindSeatNumber { get; set; }
         public abstract int BigBlindSeatNumber { get; set; }
         public abstract List<Card> Community { get; set; }
+        public abstract bool AutoStartEnabled { get; set; }
 
         private Dictionary<BlindName, Player> Blinds { get; set; } = new Dictionary<BlindName, Player>();
 

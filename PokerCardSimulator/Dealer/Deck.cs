@@ -66,5 +66,10 @@ namespace Dealer
 
             return false;
         }
+
+        public static Card[] BestHand(Dictionary<int, Card[]> cardsList)
+        {
+
+        }
     }
 }

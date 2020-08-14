@@ -61,22 +61,10 @@ namespace Dealer
             set { _texasHoldemBase.Streets = value; }
         }
 
-        public override int PlayerTimeout
+        public override double PlayerTimeoutMilliseconds
         {
-            get { return _texasHoldemBase.PlayerTimeout; }
-            set { _texasHoldemBase.PlayerTimeout = value; }
-        }
-
-        public override Task RunningGame 
-        {
-            get { return _texasHoldemBase.RunningGame; }
-            set { _texasHoldemBase.RunningGame = value; }
-        }
-
-        public override CancellationTokenSource GameCancellationSource 
-        {
-            get { return _texasHoldemBase.GameCancellationSource; }
-            set { _texasHoldemBase.GameCancellationSource = value; }
+            get { return _texasHoldemBase.PlayerTimeoutMilliseconds; }
+            set { _texasHoldemBase.PlayerTimeoutMilliseconds = value; }
         }
 
         public override Deck Deck
@@ -103,9 +91,16 @@ namespace Dealer
         }
         public override List<Player> Players => _texasHoldemBase.Players;
 
+        public override bool AutoStartEnabled 
+        {
+            get { return _texasHoldemBase.AutoStartEnabled; }
+            set { _texasHoldemBase.AutoStartEnabled = value; }
+        }
+
         public TexasHoldemCash(TexasHoldemBase texasHoldemBase)
         {
             _texasHoldemBase = texasHoldemBase;
+            _texasHoldemBase.AutoStartEnabled = true;
         }
 
         protected override TableViewBase GetTableView(int playerId)
@@ -146,6 +141,8 @@ namespace Dealer
         }
         protected void AutoStartGame()
         {
+            if (!AutoStartEnabled) return;
+
             if (!IsGameRunning && GetSittingPlayers().Count >= 2)
                 StartGame();
             else if (IsGameRunning && GetSittingPlayers().Count < 2)

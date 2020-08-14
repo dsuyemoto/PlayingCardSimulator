@@ -53,15 +53,10 @@ namespace Dealer
             get { return _texasHoldemBase.Streets; }
             set { _texasHoldemBase.Streets = value; }
         }
-        public override int PlayerTimeout
+        public override double PlayerTimeoutMilliseconds
         {
-            get { return _texasHoldemBase.PlayerTimeout; }
-            set { _texasHoldemBase.PlayerTimeout = value; }
-        }
-        public override Task RunningGame
-        {
-            get { return _texasHoldemBase.RunningGame; }
-            set { _texasHoldemBase.RunningGame = value; }
+            get { return _texasHoldemBase.PlayerTimeoutMilliseconds; }
+            set { _texasHoldemBase.PlayerTimeoutMilliseconds = value; }
         }
         public override Deck Deck
         {
@@ -72,11 +67,6 @@ namespace Dealer
         {
             get { return _texasHoldemBase.LastBet; }
             set { _texasHoldemBase.LastBet = value; }
-        }
-        public override CancellationTokenSource GameCancellationSource
-        {
-            get { return _texasHoldemBase.GameCancellationSource; }
-            set { _texasHoldemBase.GameCancellationSource = value; }
         }
         public override decimal SmallBlind
         {
@@ -90,9 +80,16 @@ namespace Dealer
         }
         public override List<Player> Players => _texasHoldemBase.Players;
 
+        public override bool AutoStartEnabled
+        {
+            get { return _texasHoldemBase.AutoStartEnabled; }
+            set { _texasHoldemBase.AutoStartEnabled = value; }
+        }
+
         public TexasHoldemTournament(TexasHoldemBase tableBase)
         {
             _texasHoldemBase = tableBase;
+            _texasHoldemBase.AutoStartEnabled = false;
         }
 
         public override void DealHand()
@@ -103,7 +100,7 @@ namespace Dealer
         protected override void SetBlindBet(decimal blind, int seatNumber)
         {
             var player = GetPlayer(seatNumber);
-            if (player.Chips > blind)
+            if (player.Chips < blind)
             {
                 player.Bet = player.Chips;
                 player.Chips = 0;

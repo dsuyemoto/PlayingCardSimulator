@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using NuGet.Frameworks;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Dealer.Player;
@@ -13,6 +15,9 @@ namespace Dealer.Tests
         Player _player1;
         Player _player2;
         Player _player3;
+        EventHandler _player1EventHandler;
+        EventHandler _player2EventHandler;
+        EventHandler _player3EventHandler;
 
         const decimal SMALLBLIND = 100;
         const decimal BIGBLIND = 200;
@@ -46,6 +51,32 @@ namespace Dealer.Tests
             _holdem.SitOut(_player1.SeatNumber);
             _holdem.SeatPlayer(_player2, SEAT2);
             _holdem.SitOut(_player2.SeatNumber);
+            _player1EventHandler = (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player1);
+                player.CurrentAction = PlayerAction.Call;
+                player.Bet = BIGBLIND;
+                player.Chips = _player1.Chips - SMALLBLIND;
+                table.UpdatePlayer(player);
+            };
+            _player2EventHandler = (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player2);
+                player.CurrentAction = PlayerAction.Check;
+                player.Bet = BIGBLIND;
+                table.UpdatePlayer(player);
+            };
+            _player3EventHandler = (s, e) =>
+            {
+                var table = (TableBase)s;
+                var player = table.GetPlayer(_player3);
+                player.CurrentAction = PlayerAction.Call;
+                player.Bet = BIGBLIND;
+                player.Chips = _player3.Chips - BIGBLIND;
+                table.UpdatePlayer(player);
+            };
         }
 
         [SetUp]        
@@ -55,33 +86,10 @@ namespace Dealer.Tests
             _player2 = new Player(PLAYERID2) { Chips = PLAYERCHIPS2 };
             _player3 = new Player(PLAYERID3) { Chips = PLAYERCHIPS3 };
             _holdem = new TexasHoldemCash(new TexasHoldemNoLimit(TABLEID, new Deck(), SMALLBLIND, BIGBLIND, 9, DEALERBUTTON, 300));
+            _holdem.AutoStartEnabled = false;
             HoldemSetup();
-            _player1.ActionPrompted += (s, e) =>
-            {
-                var table = (TableBase)s;
-                var player = table.GetPlayer(_player1);
-                player.CurrentAction = PlayerAction.Call;
-                player.Bet = BIGBLIND;
-                player.Chips = _player1.Chips - SMALLBLIND;
-                table.UpdatePlayer(player);
-            };
-            _player2.ActionPrompted += (s, e) =>
-            {
-                var table = (TableBase)s;
-                var player = table.GetPlayer(_player2);
-                player.CurrentAction = PlayerAction.Check;
-                player.Bet = BIGBLIND;
-                table.UpdatePlayer(player);
-            };
-            _player3.ActionPrompted += (s, e) =>
-            {
-                var table = (TableBase)s;
-                var player = table.GetPlayer(_player3);
-                player.CurrentAction = PlayerAction.Call;
-                player.Bet = BIGBLIND;
-                player.Chips = _player3.Chips - BIGBLIND;
-                table.UpdatePlayer(player);
-            };
+            _player1.ActionPrompted += _player1EventHandler;
+            _player2.ActionPrompted += _player2EventHandler;
         }
 
         [Test, TestCaseSource(typeof(TableClassProvider), "TableBaseClasses")]
@@ -97,18 +105,17 @@ namespace Dealer.Tests
         }
 
         [Test]
-        public void Deal_1Player_IsFalseTest()
+        public void StartGame_1Player_RunningIsFalseTest()
         {
             _holdem.UnseatPlayer(SEAT1);
             _holdem.SitIn(_player2.SeatNumber);
             _holdem.StartGame();
-            _holdem.RunningGame.Wait();
 
             Assert.IsFalse(_holdem.IsGameRunning);
         }
 
         [Test]
-        public void Deal_Cards_AreEqualTest()
+        public void DealCards_Cards_AreEqualTest()
         {
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
@@ -117,9 +124,9 @@ namespace Dealer.Tests
             _holdem.Streets.Add(new TexasHoldemCommunityStreet(_holdem, 1, false, StreetName.River));
 
             _holdem.Streets.DealCards();
-            _holdem.Streets.Next();
             Assert.AreEqual(2, _holdem.Players[0].Cards.Count);
             Assert.AreEqual(2, _holdem.Players[1].Cards.Count);
+            _holdem.Streets.Next();
             _holdem.Streets.DealCards();
             Assert.AreEqual(3, _holdem.Community.Count);
             _holdem.Streets.Next();
@@ -144,6 +151,7 @@ namespace Dealer.Tests
             Assert.AreEqual(PlayerAction.Check, _holdem.Players[1].CurrentAction);
             Assert.AreEqual(0, _holdem.Players[0].Bet);
             Assert.AreEqual(0, _holdem.Players[1].Bet);
+            Assert.AreEqual(BIGBLIND * 2, _holdem.Pot);
         }
 
         [Test]
@@ -151,6 +159,7 @@ namespace Dealer.Tests
         {
             _holdem.SitIn(_player1.SeatNumber);
             _holdem.SitIn(_player2.SeatNumber);
+            _player3.ActionPrompted += _player3EventHandler;
             _holdem.SeatPlayer(_player3, 3);
             _holdem.SitIn(_player3.SeatNumber);
 
@@ -165,6 +174,62 @@ namespace Dealer.Tests
             Assert.AreEqual(PLAYERCHIPS2 - 200, _holdem.Players.Single(p => p.SeatNumber == SEAT2).Chips);
             Assert.AreEqual(PlayerAction.Call, _holdem.Players.Single(p => p.SeatNumber == SEAT3).CurrentAction);
             Assert.AreEqual(PLAYERCHIPS3 - 200, _holdem.Players.Single(p => p.SeatNumber == SEAT3).Chips);
+            Assert.AreEqual(BIGBLIND * 3, _holdem.Pot);
+        }
+
+        [Test]
+        public void DealHand_3PlayerTimeout_SitoutTrueTest()
+        {
+            _holdem.PlayerTimeoutMilliseconds = 10;
+            _holdem.SitIn(_player1.SeatNumber);
+            _holdem.SitIn(_player2.SeatNumber);
+            _holdem.SeatPlayer(_player3, 3);
+            _holdem.SitIn(_player3.SeatNumber);
+
+            _holdem.DealHand();
+
+            Assert.AreEqual(PlayerAction.Fold, _holdem.GetPlayer(_player3).CurrentAction);
+            Assert.IsTrue(_holdem.GetPlayer(_player3).SittingOut);
+            Assert.AreEqual(PLAYERCHIPS3, _holdem.GetPlayer(_player3).Chips);
+            Assert.AreEqual(BIGBLIND * 2, _holdem.Pot);
+        }
+
+        [Test]
+        public void DealHand_2PlayerTimeout_SitoutTrueTest()
+        {
+            _holdem.PlayerTimeoutMilliseconds = 1;
+            _player1.ActionPrompted -= _player1EventHandler;
+            _holdem.SitIn(_player1.SeatNumber);
+            _holdem.SitIn(_player2.SeatNumber);
+            _holdem.SeatPlayer(_player3, 3);
+            _holdem.SitIn(_player3.SeatNumber);
+
+            _holdem.DealHand();
+
+            Assert.AreEqual(PlayerAction.Fold, _holdem.GetPlayer(_player3).CurrentAction);
+            Assert.AreEqual(PlayerAction.Check, _holdem.GetPlayer(_player2).CurrentAction);
+            Assert.AreEqual(PlayerAction.Fold, _holdem.GetPlayer(_player1).CurrentAction);
+            Assert.IsTrue(_holdem.GetPlayer(_player3).SittingOut);
+            Assert.IsFalse(_holdem.GetPlayer(_player2).SittingOut);
+            Assert.IsTrue(_holdem.GetPlayer(_player1).SittingOut);
+            Assert.AreEqual(PLAYERCHIPS3, _holdem.GetPlayer(_player3).Chips);
+            Assert.AreEqual(PLAYERCHIPS2 + BIGBLIND + SMALLBLIND, _holdem.GetPlayer(_player2).Chips);
+            Assert.AreEqual(PLAYERCHIPS1 - SMALLBLIND, _holdem.GetPlayer(_player1).Chips);
+            Assert.AreEqual(0, _holdem.Pot);
+        }
+
+        [Test]
+        public void DealHand_CollectBets_AreEqualTest()
+        {
+            _holdem.SitIn(_player1.SeatNumber);
+            _holdem.SitIn(_player2.SeatNumber);
+            _player3.ActionPrompted += _player3EventHandler;
+            _holdem.SeatPlayer(_player3, 3);
+            _holdem.SitIn(_player3.SeatNumber);
+
+            _holdem.DealHand();
+
+            Assert.AreEqual(BIGBLIND * 3, _holdem.Pot);
         }
 
         //[Test]
