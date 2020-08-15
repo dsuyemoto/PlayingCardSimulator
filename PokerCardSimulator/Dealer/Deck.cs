@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static Dealer.Card;
 
@@ -67,7 +68,18 @@ namespace Dealer
             return false;
         }
 
-        public static Card[] BestHand(Dictionary<int, Card[]> cardsList)
+        public static Hand BestHand(List<Hand> hands)
+        {
+            foreach (var hand in hands)
+            {
+                var handIndex = hands.FindIndex(h => h.Id == hand.Id);
+                hands[handIndex].Score = CalculateScore(hand);
+            }
+
+            return hands.OrderByDescending(h => h.Score).First();
+        }
+
+        public static int CalculateScore(Hand hand)
         {
 
         }

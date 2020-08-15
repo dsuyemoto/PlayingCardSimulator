@@ -163,11 +163,11 @@ namespace Dealer
             {
                 Streets.DealCards();
                 Streets.StartBettingRound(DealerButtonSeatNumber);
-                Streets.CollectBets();
+                CollectBets();
             }
             while (Streets.Next() && GetActivePlayers().Count > 1);
 
-            Streets.PayWinner();
+            PayWinner(GetActivePlayers());
 
             StartDealingSeatNumber = GetNextActiveSeat(StartDealingSeatNumber);
         }
@@ -229,9 +229,17 @@ namespace Dealer
             }
         }
 
-        public void PayWinner()
+        public void PayWinner(List<Player> players)
         {
-            player.Chips += Pot;
+            var hands = new List<Hand>();
+            foreach (var player in players)
+            {
+                var cards = player.Cards;
+                hands.Add(new Hand(player.Id, cards));
+            }
+            var bestHand = Deck.BestHand(hands);
+            var playerIndex = Players.FindIndex(p => p.Id == bestHand.Id);
+            Players[playerIndex].Chips += Pot;
             Pot = 0;
         }
 

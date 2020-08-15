@@ -17,7 +17,5 @@ namespace Dealer
 
         public abstract void DealCards();
         public abstract void StartBettingRound(int startingSeatNumber);
-        public abstract void CollectBets();
-        public abstract void PayWinner();
     }
 }

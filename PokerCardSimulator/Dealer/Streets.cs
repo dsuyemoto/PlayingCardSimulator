@@ -37,16 +37,6 @@ namespace Dealer
             _streets[_counter].StartBettingRound(startingSeatNumber);
         }
 
-        public void CollectBets()
-        {
-            _streets[_counter].CollectBets();
-        }
-
-        public void PayWinner()
-        {
-            _streets[_counter].PayWinner();
-        }
-
         public bool Next()
         {
             _counter++;

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using static Dealer.Card;
 
 namespace Dealer.Tests
@@ -165,7 +166,7 @@ namespace Dealer.Tests
         [Test]
         public void RankHands_Cards_InOrderTest()
         {
-            var hand1 = new Card[] { 
+            var hand1 = new Card[] {
                 new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
                 new Card() { RankValue = Rank.King, SuitValue = Suit.Clubs },
                 new Card() { RankValue = Rank.Queen, SuitValue = Suit.Clubs },
@@ -186,11 +187,11 @@ namespace Dealer.Tests
                 new Card() { RankValue = Rank.Four, SuitValue = Suit.Spades },
                 new Card() { RankValue = Rank.Five, SuitValue = Suit.Spades }
             };
-
-            var hands = new Dictionary<int, Card[]>();
-            hands.Add(2, hand2);
-            hands.Add(1, hand1);
-            hands.Add(3, hand3);
+            
+            var hands = new List<Hand>();
+            hands.Add(new Hand(2, hand2.ToList()));
+            hands.Add(new Hand(1, hand1.ToList()));
+            hands.Add(new Hand(3, hand3.ToList()));
 
             var bestHand = Deck.BestHand(hands);
 
