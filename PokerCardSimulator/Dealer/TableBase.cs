@@ -238,7 +238,7 @@ namespace Dealer
                 hands.Add(new Hand(player.Id, cards));
             }
             var bestHand = Deck.BestHand(hands);
-            var playerIndex = Players.FindIndex(p => p.Id == bestHand.Id);
+            var playerIndex = Players.FindIndex(p => p.Id == bestHand.PlayerId);
             Players[playerIndex].Chips += Pot;
             Pot = 0;
         }

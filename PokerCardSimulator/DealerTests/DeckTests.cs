@@ -1,7 +1,9 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using static Dealer.Card;
+using static Dealer.Deck;
 
 namespace Dealer.Tests
 {
@@ -197,5 +199,20 @@ namespace Dealer.Tests
 
             Assert.AreEqual(hand1, bestHand);
         }
+
+        [Test]
+        public void GetHandValue_HandValue_AreEqualTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds });
+            cards.Add(new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Four, SuitValue = Suit.Clubs });
+
+            var handValue = Deck.GetHandRanking(cards);
+
+            Assert.AreEqual(Ranking.TwoPair, handValue);
+        } 
     }
 }
