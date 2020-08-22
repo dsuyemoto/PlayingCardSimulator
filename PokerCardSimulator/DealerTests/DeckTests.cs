@@ -11,88 +11,6 @@ namespace Dealer.Tests
     public class DeckTests
     {
         Deck _deck;
-        static Card[] _royalFlush = new Card[] {
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Ten, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Clubs }
-        };
-        static Card[] _straightFlushFive = new Card[] {
-                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Spades },
-                new Card() { RankValue = Rank.Two, SuitValue = Suit.Spades },
-                new Card() { RankValue = Rank.Three, SuitValue = Suit.Spades },
-                new Card() { RankValue = Rank.Four, SuitValue = Suit.Spades },
-                new Card() { RankValue = Rank.Five, SuitValue = Suit.Spades }
-            };
-        static Card[] _fourOfAKind = new Card[] {
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Spades }
-        };
-        static Card[] _fullHouse = new Card[] {
-                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
-                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Hearts },
-                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
-                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Diamonds }
-            };
-        static Card[] _flush = new Card[] {
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Five, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Four, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs }
-        };
-        static Card[] _straight = new Card[] {
-            new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Two, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Three, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Four, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.Five, SuitValue = Suit.Spades }
-        };
-        static Card[] _threeOfAKind = new Card[] {
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Hearts }
-        };
-        static Card[] _twoPair = new Card[] {
-                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs },
-                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
-                new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs },
-                new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs },
-                new Card() { RankValue = Rank.Four, SuitValue = Suit.Clubs }
-            };
-        static Card[] _onePair = new Card[] {
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Hearts }
-        };
-        List<Hand> _allHands = new List<Hand>();
-        static Hand _royalFlushHand1 = new Hand(1, _royalFlush.ToList());
-        static Hand _straightFlushFiveHand2 = new Hand(2, _straightFlushFive.ToList());
-        static Hand _fourOfAKindHand3 = new Hand(3, _fourOfAKind.ToList());
-        static Hand _fullHouseHand4 = new Hand(4, _fullHouse.ToList());
-        static Hand _flushHand5 = new Hand(5, _flush.ToList());
-        static Hand _straightFiveHand6 = new Hand(6, _straight.ToList());
-        static Hand _threeOfAKindHand7 = new Hand(7, _threeOfAKind.ToList());
-        static Hand _twoPairAceEightHand8 = new Hand(8, _twoPair.ToList());
-        static Hand _onePairHand9 = new Hand(9, _onePair.ToList());
-
-        public DeckTests()
-        {
-            _allHands.Add(_royalFlushHand1);
-            _allHands.Add(_straightFlushFiveHand2);
-            _allHands.Add(_fullHouseHand4);
-            _allHands.Add(_twoPairAceEightHand8);
-            
-        }
 
         [SetUp]
         public void Setup()
@@ -244,99 +162,57 @@ namespace Dealer.Tests
 
             _deck = new Deck(cards);
 
-            Assert.IsFalse(ContainsCards(_deck.Cards, excludedCard));
+            Assert.IsFalse(Deck.ContainsCards(_deck.Cards, excludedCard));
         }
 
-        static object[] _getHandRankingTest = new object[] {
-                new object[] { Ranking.RoyalFlush, _royalFlushHand1 },
-                new object[] { Ranking.StraightFlush, _straightFlushFiveHand2 },
-                new object[] { Ranking.FourOfAKind, _fourOfAKindHand3 },
-                new object[] { Ranking.FullHouse, _fullHouseHand4 },
-                new object[] { Ranking.Flush, _flushHand5 },
-                new object[] { Ranking.Straight, _straightFiveHand6 },
-                new object[] { Ranking.ThreeOfAKind, _threeOfAKindHand7 },
-                new object[] { Ranking.TwoPair, _twoPairAceEightHand8 },
-                new object[] { Ranking.OnePair, _onePairHand9 }
+        [Test]
+        public void RankHands_Cards_InOrderTest()
+        {
+            var hand1 = new Card[] {
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.King, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Queen, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Ten, SuitValue = Suit.Clubs }
             };
-
-        [Test, TestCaseSource("_getHandRankingTest")]
-        public void GetHandRanking_Ranking_AreEqualTest(Ranking rankingMatch, Hand hand)
-        {
-            var ranking = GetHandRanking(hand);
-
-            Assert.AreEqual(rankingMatch, ranking);
-        }
-
-        [Test]
-        public void BestHands_Cards_InOrderTest()
-        {
+            var hand2 = new Card[] {
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Hearts },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Jack, SuitValue = Suit.Diamonds }
+            };
+            var hand3 = new Card[] {
+                new Card() {  RankValue = Rank.Ace, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Two, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Three, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Four, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Five, SuitValue = Suit.Spades }
+            };
+            
             var hands = new List<Hand>();
-            hands.Add(_fullHouseHand4);
-            hands.Add(_royalFlushHand1);
-            hands.Add(_straightFlushFiveHand2);
+            hands.Add(new Hand(2, hand2.ToList()));
+            hands.Add(new Hand(1, hand1.ToList()));
+            hands.Add(new Hand(3, hand3.ToList()));
 
-            var bestHand = BestHand(hands);
+            var bestHand = Deck.BestHand(hands);
 
-            Assert.AreEqual(Ranking.RoyalFlush, bestHand.Ranking);
-        }
-
-        static Hand straightFlushKing21 = new Hand(21, new Card[] { 
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Ten, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Spades }
-        }.ToList());
-
-        static Hand straightKingHand22 = new Hand(22, new Card[] {
-            new Card() { RankValue = Rank.King, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Jack, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.Ten, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Diamonds }
-        }.ToList());
-
-        static Hand twoPairQueenEightHand23 = new Hand(23, new Card[] {
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Clubs },
-            new Card() { RankValue = Rank.Queen, SuitValue = Suit.Diamonds },
-            new Card() { RankValue = Rank.Eight, SuitValue = Suit.Hearts },
-            new Card() { RankValue = Rank.Eight, SuitValue = Suit.Spades },
-            new Card() { RankValue = Rank.Nine, SuitValue = Suit.Diamonds }
-        }.ToList());
-
-        static object[] compareHandsTest = new object[]
-        {
-            new object [] { straightFlushKing21, _straightFlushFiveHand2, straightFlushKing21 }, 
-            //new object [] { straightKingHand22, _straightFiveHand6, straightKingHand22 },
-            //new object [] { _twoPairAceEightHand8, _twoPairAceEightHand8, twoPairQueenEightHand23 }
-        };
-
-        [Test, TestCaseSource("compareHandsTest")]
-        public void CompareHands_Hands_AreEqualTest(Hand expectedHand, Hand firstHand, Hand secondHand)
-        {
-            var firstHandRanking = GetHandRanking(firstHand);
-            var secondHandRanking = GetHandRanking(secondHand);
-
-            var bestHand = CompareEqualHands(firstHandRanking, secondHandRanking);
-
-            Assert.AreEqual(expectedHand, bestHand);
+            Assert.AreEqual(hand1, bestHand);
         }
 
         [Test]
-        public void RankOrderTwoPair_Ranks_AreEqualTest()
+        public void GetHandValue_HandValue_AreEqualTest()
         {
-            var ranks = new Dictionary<Rank, int>();
-            ranks.Add(Rank.Five, 1);
-            ranks.Add(Rank.Ace, 2);
-            ranks.Add(Rank.Four, 1);
-            ranks.Add(Rank.Eight, 1);
+            var cards = new List<Card>();
+            cards.Add(new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds });
+            cards.Add(new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs });
+            cards.Add(new Card() { RankValue = Rank.Four, SuitValue = Suit.Clubs });
 
-            var rankOrder = RankOrderTwoPair(ranks);
+            var handValue = Deck.GetHandRanking(cards);
 
-            Assert.AreEqual(Rank.Ace, rankOrder[0]);
-            Assert.AreEqual(Rank.Eight, rankOrder[1]);
-            Assert.AreEqual(Rank.Five, rankOrder[2]);
-            Assert.AreEqual(Rank.Four, rankOrder[3]);
-        }
+            Assert.AreEqual(Ranking.TwoPair, handValue);
+        } 
     }
 }

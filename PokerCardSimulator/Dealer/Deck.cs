@@ -85,142 +85,84 @@ namespace Dealer
 
         public static Hand BestHand(List<Hand> hands)
         {
-            Hand bestHand = null;
             foreach (var hand in hands)
             {
-                if (bestHand != null)
-                {
-                    if (GetHandRanking(hand).Ranking > bestHand.Ranking)
-                        bestHand = GetHandRanking(hand);
-                    else if (GetHandRanking(hand).Ranking == bestHand.Ranking)
-                        bestHand = CompareEqualHands(bestHand, hand);
-                }
+                var handIndex = hands.FindIndex(h => h.PlayerId == hand.PlayerId);
+                hands[handIndex].Score = CalculateScore(hand.Cards);
             }
 
-            return bestHand;
+            return hands.OrderByDescending(h => h.Score).First();
         }
 
-        public static Hand CompareEqualHands(Hand firstHand, Hand secondHand)
+        public static int CalculateScore(List<Card> cards)
         {
-            for (var i = 0; i < firstHand.RankOrder.Count; i++)
-            {
-                if ((int)firstHand.RankOrder[i] > (int)secondHand.RankOrder[i])
-                    return firstHand;
-                if ((int)firstHand.RankOrder[i] < (int)secondHand.RankOrder[i])
-                    return secondHand;
-            }
-
-            return null;
+            return -1;
         }
 
-        public static Hand GetHandRanking(Hand hand)
+        public static Ranking GetHandRanking(List<Card> cards)
         {
-            hand.Ranking = Ranking.None;
-            hand.RankOrder = new List<int>();
-
             var rankMatches = new Dictionary<Rank, int>();
             var suitMatches = new Dictionary<Suit, int>();
 
-            foreach (var card in hand.Cards)
+            foreach (var card in cards)
             {
                 if (rankMatches.ContainsKey(card.RankValue))
                     rankMatches[card.RankValue]++;
                 else
                     rankMatches.Add(card.RankValue, 1);
-
                 if (suitMatches.ContainsKey(card.SuitValue))
                     suitMatches[card.SuitValue]++;
                 else
                     suitMatches.Add(card.SuitValue, 1);
             }
 
-            if (rankMatches.Count == 5)
-            {
-                var sortedCards = hand.Cards.OrderByDescending(c => (int)c.RankValue);
-                var firstCard = (int)sortedCards.ElementAt(0).RankValue;
-                if (firstCard == (int)Rank.Ace)
-                {
-                    if (sortedCards.ElementAt(1).RankValue == Rank.Five &&
-                        sortedCards.ElementAt(2).RankValue == Rank.Four &&
-                        sortedCards.ElementAt(3).RankValue == Rank.Three &&
-                        sortedCards.ElementAt(4).RankValue == Rank.Two)
-                    {
-                        hand.RankOrder = new int[] { 5,4,3,2,1 }.ToList();
-                        hand.Ranking = Ranking.Straight;
-                    }
-                }
-
-                var currentRankValue = firstCard;
-                var rankOrder = new List<int>();
-                for (var i = 0; i < 5; i++)
-                {
-                    var currentRank = sortedCards.ElementAt(i).RankValue;
-                    if (currentRankValue != (int)currentRank)
-                        break;
-                    rankOrder.Add(currentRankValue);
-                    currentRankValue--;
-                    
-                    if (i == 5)
-                    {
-                        hand.RankOrder = rankOrder;
-                        hand.Ranking = Ranking.Straight;
-                    }
-                }
-            }
-
             if (rankMatches.Count == 4)
-            {
-                hand.RankOrder = RankOrderTwoPair(rankMatches);
-                hand.Ranking = Ranking.OnePair;
-            }
+                return Ranking.OnePair;
             if (rankMatches.Count == 3)
             {
                 if (rankMatches.ContainsValue(2))
-                {
-
-                    hand.Ranking = Ranking.TwoPair;
-                }
+                    return Ranking.TwoPair;
                 else if (rankMatches.ContainsValue(3))
-                    hand.Ranking = Ranking.ThreeOfAKind;
+                    return Ranking.ThreeOfAKind;
             }
             if (rankMatches.Count == 2)
             {
                 if (rankMatches.ContainsValue(2) && rankMatches.ContainsValue(3))
-                    hand.Ranking = Ranking.FullHouse;
+                    return Ranking.FullHouse;
                 else
-                    hand.Ranking = Ranking.FourOfAKind;
+                    return Ranking.FourOfAKind;
             }
-            if (suitMatches.Count == 1 && hand.Ranking == Ranking.Straight)
+
+            if (suitMatches.Count == 1 && IsStraight(cards))
             {
-                var sortedCards = hand.Cards.OrderByDescending(c => c.RankValue);
-                if (sortedCards.ElementAt(0).RankValue == Rank.Ace && 
-                    sortedCards.ElementAt(4).RankValue == Rank.Ten)
-                    hand.Ranking = Ranking.RoyalFlush;
+                var sortedCards = cards.OrderByDescending(c => c.RankValue);
+                if (cards.ElementAt(0).RankValue == Rank.Ace && 
+                    cards.ElementAt(4).RankValue == Rank.Ten)
+                    return Ranking.RoyalFlush;
                 else
-                    hand.Ranking = Ranking.StraightFlush;
+                    return Ranking.StraightFlush;
             }
             if (suitMatches.Count == 1)
-                hand.Ranking = Ranking.Flush;
+                return Ranking.Flush;
+            if (IsStraight(cards))
+                return Ranking.Straight;
 
-            rankMatches.OrderByDescending(r => r.Key);
-            var rankKeys = rankMatches.Keys.ToList();
-            for (var i = 0; i < rankKeys.Count; i++)
-                hand.RankOrder[i] = (int)rankKeys[i];
-
-            return hand;
+            return Ranking.None;
         }
 
-        public static List<int> RankOrderTwoPair(Dictionary<Rank, int> ranks)
+        private static bool IsStraight(List<Card> cards)
         {
-            var rankOrder = (Dictionary<Rank, int>)ranks
-                    .OrderByDescending(r => r.Value)
-                    .ThenBy(r => r.Key);
-            var rankOrderList = rankOrder.Keys.ToList();
-            var rankOrderValue = new List<int>();
-            foreach (var rank in rankOrderList)
-                rankOrderValue.Add((int)rank);
+            var sortedCards = cards.OrderByDescending(c => c.RankValue);
 
-            return rankOrderValue;
+            var currentIndex = (int)sortedCards.ElementAt(0).RankValue;
+            for (var i = 0; i < 5; i++)
+            {
+                if (currentIndex != (int)sortedCards.ElementAt(i).RankValue)
+                    return false;
+                currentIndex++;
+            }
+
+            return true;
         }
 
         private static int HighestCard(List<Card> cards)
