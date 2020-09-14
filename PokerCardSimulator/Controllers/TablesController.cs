@@ -28,7 +28,7 @@ namespace PokerCardSimulator.Controllers
         public IActionResult Update(int tableId, int playerid, int seatnumber)
         {
             var table = TableManager.GetTable(tableId);
-            var view = table.SeatPlayer(new Player(playerid), seatnumber);
+            var view = table.SeatPlayer(new Player(playerid, (s, e) => { }), seatnumber);
 
             return Ok(view);
         }

@@ -232,7 +232,7 @@ namespace Dealer.Tests
         {
             var expectedCard = new Card() { RankValue = Rank.Ace, SuitValue = Suit.Clubs };
 
-            Assert.IsTrue(Deck.ContainsCards(_deck.Cards, expectedCard));
+            Assert.IsTrue(ContainsCards(_deck.Cards, expectedCard));
         }
 
         [Test]
@@ -262,7 +262,7 @@ namespace Dealer.Tests
         [Test, TestCaseSource("_getHandRankingTest")]
         public void GetHandRanking_Ranking_AreEqualTest(Ranking rankingMatch, Hand hand)
         {
-            var ranking = GetHandRanking(hand);
+            var ranking = hand.Ranking;
 
             Assert.AreEqual(rankingMatch, ranking);
         }
@@ -275,7 +275,7 @@ namespace Dealer.Tests
             hands.Add(_royalFlushHand1);
             hands.Add(_straightFlushFiveHand2);
 
-            var bestHand = BestHand(hands);
+            var bestHand = _deck.BestHand(hands);
 
             Assert.AreEqual(Ranking.RoyalFlush, bestHand.Ranking);
         }
@@ -306,18 +306,15 @@ namespace Dealer.Tests
 
         static object[] compareHandsTest = new object[]
         {
-            new object [] { straightFlushKing21, _straightFlushFiveHand2, straightFlushKing21 }, 
-            //new object [] { straightKingHand22, _straightFiveHand6, straightKingHand22 },
-            //new object [] { _twoPairAceEightHand8, _twoPairAceEightHand8, twoPairQueenEightHand23 }
+            new object [] { straightFlushKing21, _straightFlushFiveHand2, straightFlushKing21 },
+            new object [] { straightKingHand22, _straightFiveHand6, straightKingHand22 },
+            new object [] { _twoPairAceEightHand8, _twoPairAceEightHand8, twoPairQueenEightHand23 }
         };
 
         [Test, TestCaseSource("compareHandsTest")]
         public void CompareHands_Hands_AreEqualTest(Hand expectedHand, Hand firstHand, Hand secondHand)
         {
-            var firstHandRanking = GetHandRanking(firstHand);
-            var secondHandRanking = GetHandRanking(secondHand);
-
-            var bestHand = CompareEqualHands(firstHandRanking, secondHandRanking);
+            var bestHand = CompareEqualHands(firstHand, secondHand);
 
             Assert.AreEqual(expectedHand, bestHand);
         }
@@ -325,18 +322,22 @@ namespace Dealer.Tests
         [Test]
         public void RankOrderTwoPair_Ranks_AreEqualTest()
         {
-            var ranks = new Dictionary<Rank, int>();
-            ranks.Add(Rank.Five, 1);
-            ranks.Add(Rank.Ace, 2);
-            ranks.Add(Rank.Four, 1);
-            ranks.Add(Rank.Eight, 1);
+            var cards = new Card[]
+            {
+                new Card() { RankValue = Rank.Five, SuitValue = Suit.Clubs },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Diamonds },
+                new Card() { RankValue = Rank.Ace, SuitValue = Suit.Hearts },
+                new Card() { RankValue = Rank.Four, SuitValue = Suit.Spades },
+                new Card() { RankValue = Rank.Eight, SuitValue = Suit.Clubs }
+            }.ToList();
+            var hand = new Hand(1, cards);
 
-            var rankOrder = RankOrderTwoPair(ranks);
+            var rankOrder = hand.RankOrder;
 
-            Assert.AreEqual(Rank.Ace, rankOrder[0]);
-            Assert.AreEqual(Rank.Eight, rankOrder[1]);
-            Assert.AreEqual(Rank.Five, rankOrder[2]);
-            Assert.AreEqual(Rank.Four, rankOrder[3]);
+            Assert.AreEqual((int)Rank.Ace, rankOrder[0]);
+            Assert.AreEqual((int)Rank.Eight, rankOrder[1]);
+            Assert.AreEqual((int)Rank.Five, rankOrder[2]);
+            Assert.AreEqual((int)Rank.Four, rankOrder[3]);
         }
     }
 }

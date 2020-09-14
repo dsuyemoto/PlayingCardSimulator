@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Dealer
 {
@@ -12,18 +10,6 @@ namespace Dealer
         {
             get { return _texasHoldemBase.DealerButtonSeatNumber; }
             set { _texasHoldemBase.DealerButtonSeatNumber = value; }
-        }
-
-        public override int BigBlindSeatNumber 
-        {
-            get { return _texasHoldemBase.BigBlindSeatNumber; }
-            set { _texasHoldemBase.BigBlindSeatNumber = value; }
-        }
-
-        public override int SmallBlindSeatNumber
-        {
-            get { return _texasHoldemBase.SmallBlindSeatNumber; }
-            set { _texasHoldemBase.SmallBlindSeatNumber = value; }
         }
 
         public override int StartDealingSeatNumber 
@@ -55,12 +41,6 @@ namespace Dealer
             set { _texasHoldemBase.Pot = value; }
         }
 
-        public override Streets Streets
-        {
-            get { return _texasHoldemBase.Streets; }
-            set { _texasHoldemBase.Streets = value; }
-        }
-
         public override double PlayerTimeoutMilliseconds
         {
             get { return _texasHoldemBase.PlayerTimeoutMilliseconds; }
@@ -89,8 +69,6 @@ namespace Dealer
             get { return _texasHoldemBase.BigBlind; }
             set { _texasHoldemBase.BigBlind = value; }
         }
-        public override List<Player> Players => _texasHoldemBase.Players;
-
         public override bool AutoStartEnabled 
         {
             get { return _texasHoldemBase.AutoStartEnabled; }
