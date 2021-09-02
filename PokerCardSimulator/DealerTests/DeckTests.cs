@@ -338,5 +338,80 @@ namespace Dealer.Tests
             Assert.AreEqual(Rank.Five, rankOrder[2]);
             Assert.AreEqual(Rank.Four, rankOrder[3]);
         }
+
+        [Test]
+        public void IsFlush_SuitsEqual_IsTrueTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+
+            var isFlush = IsFlush(cards);
+
+            Assert.IsTrue(isFlush);
+        }
+
+        [Test]
+        public void IsFlush_SuitsNotEqual_IsFalseTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Clubs });
+            cards.Add(new Card() { SuitValue = Suit.Diamonds });
+
+            var isFlush = IsFlush(cards);
+
+            Assert.IsFalse(isFlush);
+        }
+
+        [Test]
+        public void IsStraight_RanksIsWheel_IsTrueTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { RankValue = Rank.Ace });
+            cards.Add(new Card() { RankValue = Rank.Five });
+            cards.Add(new Card() { RankValue = Rank.Four });
+            cards.Add(new Card() { RankValue = Rank.Three });
+            cards.Add(new Card() { RankValue = Rank.Two });
+
+            var isStraight = IsStraight(cards);
+
+            Assert.IsTrue(isStraight);
+        }
+
+        [Test]
+        public void IsStraight_RanksInSeries_IsTrueTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { RankValue = Rank.Ten });
+            cards.Add(new Card() { RankValue = Rank.Jack });
+            cards.Add(new Card() { RankValue = Rank.Queen });
+            cards.Add(new Card() { RankValue = Rank.King });
+            cards.Add(new Card() { RankValue = Rank.Ace });
+
+            var isStraight = IsStraight(cards);
+
+            Assert.IsTrue(isStraight);
+        }
+
+        [Test]
+        public void IsStraight_RanksNotInSeries_IsFalseTest()
+        {
+            var cards = new List<Card>();
+            cards.Add(new Card() { RankValue = Rank.Eight });
+            cards.Add(new Card() { RankValue = Rank.Jack });
+            cards.Add(new Card() { RankValue = Rank.Queen });
+            cards.Add(new Card() { RankValue = Rank.King });
+            cards.Add(new Card() { RankValue = Rank.Ace });
+
+            var isStraight = IsStraight(cards);
+
+            Assert.IsFalse(isStraight);
+        }
     }
 }

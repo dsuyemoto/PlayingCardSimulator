@@ -10,7 +10,7 @@ namespace Dealer
         public List<Card> Cards { get; set; }
         public Ranking Ranking { get; set; }
         public List<int> RankOrder { get; set; }
-
+        
         public Hand(int playerId, List<Card> cards)
         {
             PlayerId = playerId;

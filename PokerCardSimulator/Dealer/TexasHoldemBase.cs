@@ -123,14 +123,6 @@ namespace Dealer
             return null;
         }
 
-        private void SetBlindPlayer(BlindName blindName, Player player)
-        {
-            if (Blinds.ContainsKey(blindName))
-                Blinds[blindName] = player;
-            else
-                Blinds.Add(blindName, player);
-        }
-
         public void FixDealerButton()
         {
             if (GetActivePlayers().Count == 2)
@@ -141,6 +133,16 @@ namespace Dealer
 
                 DealerButtonSeatNumber = smallBlindPlayer.SeatNumber;
             }
+        }
+
+
+
+        private void SetBlindPlayer(BlindName blindName, Player player)
+        {
+            if (Blinds.ContainsKey(blindName))
+                Blinds[blindName] = player;
+            else
+                Blinds.Add(blindName, player);
         }
 
         private void MoveButton()
