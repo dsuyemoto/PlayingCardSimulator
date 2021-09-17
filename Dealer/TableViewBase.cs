@@ -12,9 +12,9 @@ namespace Dealer
 
         public TableViewBase(TableBase tableBase, int playerId)
         {
-            Players = new List<Player>();
+            Players = tableBase.GetSittingPlayers();
 
-            foreach (var player in tableBase.Players)
+            foreach (var player in Players)
             {
                 if (player.Id != playerId)
                 {

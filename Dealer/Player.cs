@@ -5,6 +5,13 @@ namespace Dealer
 {
     public class Player
     {
+        EventHandler _actionPrompted;
+
+        private void ActionPromptedhandler(object sender, EventArgs eventArgs)
+        {
+            _actionPrompted(sender, eventArgs);
+        }
+
         public enum PlayerAction
         {
             Check,
@@ -32,12 +39,13 @@ namespace Dealer
         public TableViewBase ReturnView { get; set; }
         public System.Timers.Timer Timer { get; set; }
 
-        public event EventHandler ActionPrompted;
-        public event EventHandler PlayerActed;
+        event EventHandler ActionPrompted;
+        event EventHandler PlayerActed;
 
-        public Player(int id)
+        public Player(int id, EventHandler actionPrompted)
         {
             Id = id;
+            _actionPrompted = actionPrompted;
         }
 
         public void OnActionPrompted(object sender, ActionPromptedEventArgs actionPromptedEventArgs)
@@ -50,6 +58,11 @@ namespace Dealer
         {
             var handler = PlayerActed;
             handler?.Invoke(sender, e);
+        }
+
+        public void ResetActionPrompted()
+        {
+            ActionPrompted += _actionPrompted;
         }
     }
 }
