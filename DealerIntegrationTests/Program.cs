@@ -7,8 +7,8 @@ namespace DealerIntegrationTests
     {
         static void Main(string[] args)
         {
-            var player1 = new Player(0) { Chips = 1000 };
-            var player2 = new Player(1) { Chips = 2000 };
+            var player1 = new Player(0, (o,e)=> { } ) { Chips = 1000 };
+            var player2 = new Player(1, (o,e)=> { } ) { Chips = 2000 };
             var _holdem = new TexasHoldemNoLimit(10, new Deck(), 10, 20);
             _holdem.SeatPlayer(player1, 1);
             _holdem.SeatPlayer(player2, 2);

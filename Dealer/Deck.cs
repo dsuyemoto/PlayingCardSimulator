@@ -114,6 +114,18 @@ namespace Dealer
             return null;
         }
 
+        public static List<Card> GetStraightCards(List<Card> cards)
+        {
+            List<Card> straightcards = new List<Card>();
+            var sortedcards = cards.OrderByDescending(c => c.RankValue);
+            Card previouscard = null;
+            for (var i = 0; i < sortedcards.Count(); i++)
+                if (previouscard != null && previouscard.RankValue + 1 == sortedcards.ElementAt(i).RankValue)
+                    straightcards.Add(sortedcards.ElementAt(i));
+
+            return straightcards;
+        }
+
         private static int HighestCard(List<Card> cards)
         {
             var sortedCards = cards.OrderByDescending(c => c.RankValue);

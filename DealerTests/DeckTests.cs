@@ -371,7 +371,7 @@ namespace Dealer.Tests
         }
 
         [Test]
-        public void IsStraight_RanksIsWheel_IsTrueTest()
+        public void IsStraight_RanksIsWheel_IsFiveTest()
         {
             var cards = new List<Card>();
             cards.Add(new Card() { RankValue = Rank.Ace });
@@ -380,13 +380,13 @@ namespace Dealer.Tests
             cards.Add(new Card() { RankValue = Rank.Three });
             cards.Add(new Card() { RankValue = Rank.Two });
 
-            var isStraight = IsStraight(cards);
+            var straightcards = GetStraightCards(cards);
 
-            Assert.IsTrue(isStraight);
+            Assert.AreEqual(5, straightcards.Count);
         }
 
         [Test]
-        public void IsStraight_RanksInSeries_IsTrueTest()
+        public void IsStraight_RanksInSeries_IsFiveTest()
         {
             var cards = new List<Card>();
             cards.Add(new Card() { RankValue = Rank.Ten });
@@ -394,25 +394,26 @@ namespace Dealer.Tests
             cards.Add(new Card() { RankValue = Rank.Queen });
             cards.Add(new Card() { RankValue = Rank.King });
             cards.Add(new Card() { RankValue = Rank.Ace });
+            cards.Add(new Card() { RankValue = Rank.Eight });
 
-            var isStraight = IsStraight(cards);
+            var straightcards = GetStraightCards(cards);
 
-            Assert.IsTrue(isStraight);
+            Assert.AreEqual(5, straightcards.Count);
         }
 
         [Test]
-        public void IsStraight_RanksNotInSeries_IsFalseTest()
+        public void IsStraight_RanksNotInSeries_IsEmptyTest()
         {
             var cards = new List<Card>();
             cards.Add(new Card() { RankValue = Rank.Eight });
             cards.Add(new Card() { RankValue = Rank.Jack });
-            cards.Add(new Card() { RankValue = Rank.Queen });
+            cards.Add(new Card() { RankValue = Rank.Two });
             cards.Add(new Card() { RankValue = Rank.King });
-            cards.Add(new Card() { RankValue = Rank.Ace });
+            cards.Add(new Card() { RankValue = Rank.Five });
 
-            var isStraight = IsStraight(cards);
+            var straightcards = GetStraightCards(cards);
 
-            Assert.IsFalse(isStraight);
+            Assert.AreEqual(0, straightcards.Count);
         }
     }
 }
