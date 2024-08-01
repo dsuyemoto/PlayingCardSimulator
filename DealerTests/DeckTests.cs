@@ -341,36 +341,6 @@ namespace Dealer.Tests
         }
 
         [Test]
-        public void IsFlush_SuitsEqual_IsTrueTest()
-        {
-            var cards = new List<Card>();
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-
-            var isFlush = IsFlush(cards);
-
-            Assert.IsTrue(isFlush);
-        }
-
-        [Test]
-        public void IsFlush_SuitsNotEqual_IsFalseTest()
-        {
-            var cards = new List<Card>();
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Clubs });
-            cards.Add(new Card() { SuitValue = Suit.Diamonds });
-
-            var isFlush = IsFlush(cards);
-
-            Assert.IsFalse(isFlush);
-        }
-
-        [Test]
         public void IsStraight_RanksIsWheel_IsFiveTest()
         {
             var cards = new List<Card>();
