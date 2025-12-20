@@ -1,13 +1,11 @@
-﻿using Moq;
-using NuGet.Frameworks;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Dealer;
+using NUnit.Framework;
 using static Dealer.Player;
 using static Dealer.TableBase;
 
-namespace Dealer.Tests
+namespace DealerTests
 {
     [TestFixture()]
     public class TexasHoldemBaseTests

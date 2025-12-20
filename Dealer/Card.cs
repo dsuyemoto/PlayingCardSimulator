@@ -2,6 +2,13 @@
 {
     public class Card
     {
+        public Card(Rank rank, Suit suit, bool isHidden = false)
+        {
+            RankValue = rank;
+            SuitValue = suit;
+            IsHidden = isHidden;
+        }
+        
         public enum Rank
         {
             Two = 2,
@@ -20,23 +27,23 @@
         } 
         public enum Suit
         {
-            Clubs,
-            Diamonds,
-            Hearts,
-            Spades
+            Club,
+            Diamond,
+            Heart,
+            Spade
         }
-        public Rank RankValue { get; set; }
-        public Suit SuitValue { get; set; }
+        public Rank RankValue { get; }
+        public Suit SuitValue { get; }
         public bool IsHidden { get; set; }
-
-        public Card()
-        {
-
-        }
 
         public override string ToString()
         {
             return RankValue.ToString() + SuitValue.ToString();
+        }
+
+        public bool MatchCard(Card card)
+        {
+            return (card.SuitValue == SuitValue && card.RankValue == RankValue);
         }
     }
 }

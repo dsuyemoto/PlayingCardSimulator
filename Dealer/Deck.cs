@@ -6,8 +6,12 @@ namespace Dealer
 {
     public class Deck
     {
-        Suit[] _suits = new Suit[] { Suit.Clubs, Suit.Hearts, Suit.Diamonds, Suit.Spades };
-        Rank[] _ranks = new Rank[] {
+        private readonly Suit[] _suits = new Suit[]
+        {
+            Suit.Club, Suit.Heart, Suit.Diamond, Suit.Spade
+        };
+
+        private readonly Rank[] _ranks = new Rank[] {
             Rank.Ace,
             Rank.Two,
             Rank.Three,
@@ -41,20 +45,21 @@ namespace Dealer
 
         public Deck(List<Card> excludedCards = null)
         {
-            if (excludedCards == null)
-                ShuffleDeck(new List<Card>());
-            else
-                ShuffleDeck(excludedCards);
+            CreateDeck(excludedCards ?? new List<Card>());
         }
 
-        private void ShuffleDeck(List<Card> excludedCards)
+        private void CreateDeck(List<Card> excludedCards)
         {
             foreach (var suit in _suits)
                 foreach (var rank in _ranks)
-                    if (!ContainsCards(excludedCards, new Card() { RankValue = rank, SuitValue = suit }))
-                        Cards.Add(new Card() { RankValue = rank, SuitValue = suit });
+                    Cards.Add(new Card(rank, suit));
         }
 
+        private void RemoveCards(List<Card> excludedCards)
+        {
+            foreach (var card in excludedCards)
+                Cards.Remove(card);
+        }
         public Card GetCard(int slot)
         {
             var card = Cards[slot];
@@ -72,9 +77,9 @@ namespace Dealer
             return card;
         }
 
-        public static bool ContainsCards(List<Card> cardList, Card cardMatch)
+        public bool ContainsCard(Card cardMatch)
         {
-            foreach (var card in cardList)
+            foreach (var card in Cards)
                 if (card.SuitValue == cardMatch.SuitValue && card.RankValue == cardMatch.RankValue) return true;
 
             return false;
