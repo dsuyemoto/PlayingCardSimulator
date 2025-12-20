@@ -45,10 +45,11 @@ namespace Dealer
 
         public Deck(List<Card> excludedCards = null)
         {
-            CreateDeck(excludedCards ?? new List<Card>());
+            CreateDeck();
+            RemoveCards(excludedCards ?? new List<Card>());
         }
 
-        private void CreateDeck(List<Card> excludedCards)
+        private void CreateDeck()
         {
             foreach (var suit in _suits)
                 foreach (var rank in _ranks)
@@ -57,9 +58,19 @@ namespace Dealer
 
         private void RemoveCards(List<Card> excludedCards)
         {
-            foreach (var card in excludedCards)
-                Cards.Remove(card);
+            List<Card> cardsCopy = Cards.ToList();
+            foreach (var excludedCard in excludedCards)
+                foreach (var deckCard in cardsCopy)
+                    if (deckCard.MatchCard(excludedCard)) Cards.RemoveAt(GetCardIndex(excludedCard));
         }
+
+        private int GetCardIndex(Card card)
+        {
+            for (var i = 0; i < Cards.Count; i++)
+                if (Cards[i].MatchCard(card)) return i;
+            return -1;
+        }
+        
         public Card GetCard(int slot)
         {
             var card = Cards[slot];
