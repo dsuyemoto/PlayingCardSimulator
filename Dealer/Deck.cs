@@ -130,16 +130,27 @@ namespace Dealer
             return null;
         }
 
-        public static List<Card> GetStraightCards(List<Card> cards)
+        public static bool GetStraightCards(List<Card> cards)
         {
-            List<Card> straightcards = new List<Card>();
-            var sortedcards = cards.OrderByDescending(c => c.RankValue);
-            Card previouscard = null;
-            for (var i = 0; i < sortedcards.Count(); i++)
-                if (previouscard != null && previouscard.RankValue + 1 == sortedcards.ElementAt(i).RankValue)
-                    straightcards.Add(sortedcards.ElementAt(i));
+            List<Card> straightCards = new List<Card>();
+            var sortedCards = cards.OrderByDescending(c => c.RankValue).ToList();
+            straightCards.Add(sortedCards[0]);
 
-            return straightcards;
+            for (var i = 1; i < sortedCards.Count(); i++)
+            {
+                var diff = straightCards.Last().RankValue - sortedCards[i].RankValue;
+                if (diff == 1)
+                {
+                    straightCards.Add(sortedCards[i]);
+                }
+                else if (diff > 1)
+                {
+                    straightCards.Clear();
+                    straightCards.Add(sortedCards[i]);
+                }
+                if (straightCards.Count == 5) return true;
+            }
+            return false;
         }
 
         private static int HighestCard(List<Card> cards)

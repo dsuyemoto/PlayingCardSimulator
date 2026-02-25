@@ -355,9 +355,9 @@ namespace DealerTests
             cards.Add(new Card(Rank.Three, Suit.Club));
             cards.Add(new Card(Rank.Two, Suit.Club));
 
-            var straightcards = GetStraightCards(cards);
+            var isStraight = GetStraightCards(cards);
 
-            Assert.AreEqual(5, straightcards.Count);
+            Assert.IsTrue(isStraight);
         }
 
         [Test]
@@ -371,9 +371,9 @@ namespace DealerTests
             cards.Add(new Card(Rank.Ace, Suit.Club));
             cards.Add(new Card(Rank.Eight, Suit.Club));
 
-            var straightcards = GetStraightCards(cards);
+            var isStraight = GetStraightCards(cards);
 
-            Assert.AreEqual(5, straightcards.Count);
+            Assert.IsTrue(isStraight);
         }
 
         [Test]
@@ -386,9 +386,9 @@ namespace DealerTests
             cards.Add(new Card(Rank.King, Suit.Club));
             cards.Add(new Card(Rank.Five, Suit.Club));
 
-            var straightcards = GetStraightCards(cards);
+            var isStraight = GetStraightCards(cards);
 
-            Assert.AreEqual(0, straightcards.Count);
+            Assert.IsTrue(isStraight);
         }
     }
 }
